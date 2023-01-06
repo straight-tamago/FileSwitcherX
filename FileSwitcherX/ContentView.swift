@@ -33,31 +33,31 @@ struct ContentView: View {
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/MaterialKit.framework/Assets.car")
         ),
         TargetFilesPath_Struct(
-            TargetFileTitle: "Dock Dark (dockDark.materialrecipe)",
+            TargetFileTitle: "Dock Dark (dockDark.materialrecipe) [Location service required]",
             TargetFilePath: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockDark.materialrecipe",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockDark.materialrecipe")
         ),
         TargetFilesPath_Struct(
-            TargetFileTitle: "Dock Light (dockLight.materialrecipe)",
+            TargetFileTitle: "Dock Light (dockLight.materialrecipe) [Location service required]",
             TargetFilePath: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockLight.materialrecipe",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockLight.materialrecipe")
         ),
         TargetFilesPath_Struct(
-            TargetFileTitle: "Folder Dark (folderDark.materialrecipe)",
+            TargetFileTitle: "Folder Dark\n(folderDark.materialrecipe)\n[Location service required]",
             TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderDark.materialrecipe",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderDark.materialrecipe")
         ),
         TargetFilesPath_Struct(
-            TargetFileTitle: "Folder Light (folderDark.materialrecipe)",
+            TargetFileTitle: "Folder Light\n(folderDark.materialrecipe)\n[Location service required]",
             TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderLight.materialrecipe",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderLight.materialrecipe")
         ),
         TargetFilesPath_Struct(
-            TargetFileTitle: "Shortcut Banner (BannersAuthorizedBundleIDs.plist)",
+            TargetFileTitle: "Shortcut Banner\n(BannersAuthorizedBundleIDs.plist)",
             TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoard.framework/BannersAuthorizedBundleIDs.plist",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/SpringBoard.framework/BannersAuthorizedBundleIDs.plist")
@@ -227,6 +227,23 @@ struct ContentView: View {
                     },
                     .cancel()
                 ])
+            }
+            .alert(isPresented: $Update_Alert) {
+                if Update_Available == true {
+                    return Alert(title: Text("Update available"),
+                          message: Text("Do you want to download the update from the Github ?"),
+                          primaryButton: .destructive(Text("OK"),action: {
+                        if let url = URL(string: "https://github.com/straight-tamago/FileSwitcherX/releases") {
+                            UIApplication.shared.open(url)
+                        }
+                    }),
+                          secondaryButton: .default(Text("Cancel"))
+                    )
+                }else{
+                    return Alert(title: Text("No Update"),
+                          dismissButton: .default(Text("OK"))
+                    )
+                }
             }
         }
     }
