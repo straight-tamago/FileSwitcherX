@@ -31,7 +31,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
 
         if CLLocationManager.locationServicesEnabled(){
-            locationManager!.distanceFilter = 0.1
+            locationManager!.distanceFilter = 1
+            locationManager!.desiredAccuracy = kCLLocationAccuracyBest
             locationManager!.allowsBackgroundLocationUpdates = true //バックグラウンド処理を可能にする
             locationManager!.pausesLocationUpdatesAutomatically = false //ポーズしても位置取得を続ける
             locationManager!.startUpdatingLocation()
