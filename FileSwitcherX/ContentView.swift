@@ -81,12 +81,6 @@ struct ContentView: View {
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/key_press_modifier.caf")
         ),
         TargetFilesPath_Struct(
-            TargetFileTitle: "key_press_modifier.caf",
-            TargetFilePath: "/System/Library/Audio/UISounds/Tock.caf",
-            DefaultFileHeader: "caf",
-            Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/Tock.caf")
-        ),
-        TargetFilesPath_Struct(
             TargetFileTitle: "Tock.caf",
             TargetFilePath: "/System/Library/Audio/UISounds/Tock.caf",
             DefaultFileHeader: "caf",
