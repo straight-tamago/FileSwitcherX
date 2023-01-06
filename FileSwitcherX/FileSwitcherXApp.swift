@@ -43,24 +43,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         TargetFilesPath_Struct(
             TargetFileTitle: "Dock Dark (dockDark.materialrecipe)",
             TargetFilePath: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockDark.materialrecipe",
+            LocationRequired: "",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockDark.materialrecipe")
         ),
         TargetFilesPath_Struct(
             TargetFileTitle: "Dock Light (dockLight.materialrecipe)",
             TargetFilePath: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockLight.materialrecipe",
+            LocationRequired: "",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockLight.materialrecipe")
         ),
         TargetFilesPath_Struct(
             TargetFileTitle: "Folder Dark (folderDark.materialrecipe)",
             TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderDark.materialrecipe",
+            LocationRequired: "",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderDark.materialrecipe")
         ),
         TargetFilesPath_Struct(
             TargetFileTitle: "Folder Light (folderDark.materialrecipe)",
             TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderLight.materialrecipe",
+            LocationRequired: "",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderLight.materialrecipe")
         )

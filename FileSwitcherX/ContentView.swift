@@ -11,6 +11,7 @@ struct TargetFilesPath_Struct: Identifiable {
     var id = UUID()
     let TargetFileTitle: String
     let TargetFilePath: String
+    let LocationRequired: String
     let DefaultFileHeader: String
     var Disable: Bool
 }
@@ -29,78 +30,91 @@ struct ContentView: View {
         TargetFilesPath_Struct(
             TargetFileTitle: "Homebar (Assets.car)",
             TargetFilePath: "/System/Library/PrivateFrameworks/MaterialKit.framework/Assets.car",
+            LocationRequired: "",
             DefaultFileHeader: "BOM",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/MaterialKit.framework/Assets.car")
         ),
         TargetFilesPath_Struct(
-            TargetFileTitle: "Dock Dark (dockDark.materialrecipe) [Location service required]",
+            TargetFileTitle: "Dock Dark\n(dockDark.materialrecipe)",
             TargetFilePath: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockDark.materialrecipe",
+            LocationRequired: "\n[Location service required]",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockDark.materialrecipe")
         ),
         TargetFilesPath_Struct(
-            TargetFileTitle: "Dock Light (dockLight.materialrecipe) [Location service required]",
+            TargetFileTitle: "Dock Light\n(dockLight.materialrecipe)",
             TargetFilePath: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockLight.materialrecipe",
+            LocationRequired: "\n[Location service required]",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockLight.materialrecipe")
         ),
         TargetFilesPath_Struct(
-            TargetFileTitle: "Folder Dark\n(folderDark.materialrecipe)\n[Location service required]",
+            TargetFileTitle: "Folder Dark\n(folderDark.materialrecipe)",
             TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderDark.materialrecipe",
+            LocationRequired: "\n[Location service required]",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderDark.materialrecipe")
         ),
         TargetFilesPath_Struct(
-            TargetFileTitle: "Folder Light\n(folderDark.materialrecipe)\n[Location service required]",
+            TargetFileTitle: "Folder Light\n(folderDark.materialrecipe)",
             TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderLight.materialrecipe",
+            LocationRequired: "\n[Location service required]",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderLight.materialrecipe")
         ),
         TargetFilesPath_Struct(
             TargetFileTitle: "Shortcut Banner\n(BannersAuthorizedBundleIDs.plist)",
             TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoard.framework/BannersAuthorizedBundleIDs.plist",
+            LocationRequired: "",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/SpringBoard.framework/BannersAuthorizedBundleIDs.plist")
         ),
         TargetFilesPath_Struct(
             TargetFileTitle: "key_press_click.caf",
             TargetFilePath: "/System/Library/Audio/UISounds/key_press_click.caf",
+            LocationRequired: "",
             DefaultFileHeader: "caf",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/key_press_click.caf")
         ),
         TargetFilesPath_Struct(
             TargetFileTitle: "key_press_delete.caf",
             TargetFilePath: "/System/Library/Audio/UISounds/key_press_delete.caf",
+            LocationRequired: "",
             DefaultFileHeader: "caf",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/key_press_delete.caf")
         ),
         TargetFilesPath_Struct(
             TargetFileTitle: "key_press_modifier.caf",
             TargetFilePath: "/System/Library/Audio/UISounds/key_press_modifier.caf",
+            LocationRequired: "",
             DefaultFileHeader: "caf",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/key_press_modifier.caf")
         ),
         TargetFilesPath_Struct(
             TargetFileTitle: "Tock.caf",
             TargetFilePath: "/System/Library/Audio/UISounds/Tock.caf",
+            LocationRequired: "",
             DefaultFileHeader: "caf",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/Tock.caf")
         ),
         TargetFilesPath_Struct(
             TargetFileTitle: "lock.caf",
             TargetFilePath: "/System/Library/Audio/UISounds/lock.caf",
+            LocationRequired: "",
             DefaultFileHeader: "caf",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/lock.caf")
         ),
         TargetFilesPath_Struct(
             TargetFileTitle: "low_power.caf",
             TargetFilePath: "/System/Library/Audio/UISounds/low_power.caf",
+            LocationRequired: "",
             DefaultFileHeader: "caf",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/low_power.caf")
         ),
         TargetFilesPath_Struct(
             TargetFileTitle: "connect_power.caf",
             TargetFilePath: "/System/Library/Audio/UISounds/connect_power.caf",
+            LocationRequired: "",
             DefaultFileHeader: "caf",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/connect_power.caf")
         ),
@@ -109,7 +123,7 @@ struct ContentView: View {
     var body: some View {
         List(TargetFilesPath.indices, id: \.self) { index in
             HStack {
-                Text(TargetFilesPath[index].TargetFileTitle)
+                Text(TargetFilesPath[index].TargetFileTitle)+Text(TargetFilesPath[index].LocationRequired).foregroundColor(.green)
                 Spacer()
                 Toggle(isOn: $TargetFilesPath[index].Disable) {
                     HStack {
