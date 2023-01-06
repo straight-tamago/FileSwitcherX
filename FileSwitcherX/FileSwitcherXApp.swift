@@ -73,8 +73,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         
         TargetFilesPath.forEach { item in
-            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        
             if UserDefaults.standard.bool(forKey: item.TargetFilePath) == true {
                 overwrite(TargetFilePath: item.TargetFilePath, OverwriteData: "xxx")
             }
