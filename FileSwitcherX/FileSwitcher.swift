@@ -64,9 +64,10 @@ func IsSucceeded(TargetFilePath: String) -> Bool {
     }
     var databinary = data[0..<3].map { String(format: "%02X", $0)}
     var dataString = databinary.joined()
-    print(dataString)
+//    print(dataString)
     if dataString != "787878" {
         return false
     }
     return true
 }
+

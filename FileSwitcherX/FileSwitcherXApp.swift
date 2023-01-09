@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import CoreLocation //CoreLocationを利用
+import CoreLocation
+import UserNotifications
 
 @main
 struct FileSwitcherXApp: App {
@@ -20,26 +21,24 @@ struct FileSwitcherXApp: App {
     }
 }
 
-// アプリの起動時に、位置情報を利用できるように設定してしまう
-class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate{
-    var locationManager : CLLocationManager?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool{
+class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
+    var locationManager: CLLocationManager!
+
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions:
+    [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         locationManager = CLLocationManager()
-        locationManager!.delegate = self
-        locationManager!.requestAlwaysAuthorization()
-
-
-        if CLLocationManager.locationServicesEnabled(){
-            locationManager!.distanceFilter = 1
-            locationManager!.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager!.allowsBackgroundLocationUpdates = true //バックグラウンド処理を可能にする
-            locationManager!.pausesLocationUpdatesAutomatically = false //ポーズしても位置取得を続ける
-            locationManager!.startUpdatingLocation()
-        }
-
+        locationManager.distanceFilter = 1
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.allowsBackgroundLocationUpdates = true //バックグラウンド処理を可能にする
+        locationManager.pausesLocationUpdatesAutomatically = false //ポーズしても位置取得を続ける
+        locationManager.delegate = self
+        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
+        
         return true
     }
+    
     @State var TargetFilesPath: [TargetFilesPath_Struct] = [
         TargetFilesPath_Struct(
             TargetFileTitle: "Dock Dark (dockDark.materialrecipe)",
@@ -68,22 +67,87 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             LocationRequired: "",
             DefaultFileHeader: "bpl",
             Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderLight.materialrecipe")
-        )
+        ),
+        TargetFilesPath_Struct(
+            TargetFileTitle: "Folder Blur\n(folderExpandedBackgroundHome.materialrecipe)",
+            TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderExpandedBackgroundHome.materialrecipe",
+            LocationRequired: "\n[Location service required]",
+            DefaultFileHeader: "bpl",
+            Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderExpandedBackgroundHome.materialrecipe")
+        ),
+        TargetFilesPath_Struct(
+            TargetFileTitle: "Switcher Blur\n(homeScreenBackdrop-application.materialrecipe)",
+            TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoard.framework/homeScreenBackdrop-application.materialrecipe",
+            LocationRequired: "\n[Location service required]",
+            DefaultFileHeader: "bpl",
+            Disable: UserDefaults.standard.bool(forKey: "/System/Library/PrivateFrameworks/SpringBoard.framework/homeScreenBackdrop-application.materialrecipe")
+        ),
+        TargetFilesPath_Struct(
+            TargetFileTitle: "photoShutter.caf",
+            TargetFilePath: "/System/Library/Audio/UISounds/photoShutter.caf",
+            LocationRequired: "\n[Location service required]",
+            DefaultFileHeader: "caf",
+            Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/photoShutter.caf")
+        ),
+        TargetFilesPath_Struct(
+            TargetFileTitle: "begin_record.caf",
+            TargetFilePath: "/System/Library/Audio/UISounds/begin_record.caf",
+            LocationRequired: "\n[Location service required]",
+            DefaultFileHeader: "caf",
+            Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/begin_record.caf")
+        ),
+        TargetFilesPath_Struct(
+            TargetFileTitle: "end_record.caf",
+            TargetFilePath: "/System/Library/Audio/UISounds/end_record.caf",
+            LocationRequired: "\n[Location service required]",
+            DefaultFileHeader: "caf",
+            Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/end_record.caf")
+        ),
+        TargetFilesPath_Struct(
+            TargetFileTitle: "camera_shutter_burst.caf",
+            TargetFilePath: "/System/Library/Audio/UISounds/Modern/camera_shutter_burst.caf",
+            LocationRequired: "\n[Location service required]",
+            DefaultFileHeader: "caf",
+            Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/Modern/camera_shutter_burst.caf")
+        ),
+        TargetFilesPath_Struct(
+            TargetFileTitle: "camera_shutter_burst_begin.caf",
+            TargetFilePath: "/System/Library/Audio/UISounds/Modern/camera_shutter_burst_begin.caf",
+            LocationRequired: "\n[Location service required]",
+            DefaultFileHeader: "caf",
+            Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/Modern/camera_shutter_burst_begin.caf")
+        ),
+        TargetFilesPath_Struct(
+            TargetFileTitle: "camera_shutter_burst_end.caf",
+            TargetFilePath: "/System/Library/Audio/UISounds/Modern/camera_shutter_burst_end.caf",
+            LocationRequired: "\n[Location service required]",
+            DefaultFileHeader: "caf",
+            Disable: UserDefaults.standard.bool(forKey: "/System/Library/Audio/UISounds/Modern/camera_shutter_burst_end.caf")
+        ),
     ]
 
-    //位置情報に変化があった場合の処理（今回は単純に緯度と軽度を出力する）
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
-        guard let newLocation = locations.last else {
-            return
-        }
-        
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        /* ここで位置情報を取得、保存する */
+        print("Update")
         TargetFilesPath.forEach { item in
             if UserDefaults.standard.bool(forKey: item.TargetFilePath) == true {
                 overwrite(TargetFilePath: item.TargetFilePath, OverwriteData: "xxx")
             }
         }
-        
-        let location: CLLocationCoordinate2D = CLLocationCoordinate2DMake(newLocation.coordinate.latitude, newLocation.coordinate.longitude)
-        print("緯度: ", location.latitude, "経度: ", location.longitude)
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        locationManager.startMonitoringSignificantLocationChanges()
+        locationManager.startUpdatingLocation()
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        locationManager.stopUpdatingLocation()
+        locationManager.startMonitoringSignificantLocationChanges()
+    }
+    
+    func willFinishLaunchingWithOptions(_ application: UIApplication) {
+        locationManager.stopUpdatingLocation()
+        locationManager.startMonitoringSignificantLocationChanges()
     }
 }
