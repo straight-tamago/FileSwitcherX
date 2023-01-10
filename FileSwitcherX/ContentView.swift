@@ -491,9 +491,9 @@ struct DocumentPickerView : UIViewControllerRepresentable {
     }
     
     func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        let path = NSString(string: self.TargetFilesPath_Dict[self.Picker_index].TargetFilesPath_Dict[self.Picker_index_2].TargetFilePath)
-        let types = UTType.types(tag: path.pathExtension, tagClass: UTTagClass.filenameExtension, conformingTo: nil)
-        let documentPickerViewController =  UIDocumentPickerViewController(forOpeningContentTypes: types, asCopy: true)
+//        let path = NSString(string: self.TargetFilesPath_Dict[self.Picker_index].TargetFilesPath_Dict[self.Picker_index_2].TargetFilePath)
+//        let types = UTType.types(tag: path.pathExtension, tagClass: UTTagClass.filenameExtension, conformingTo: nil)
+        let documentPickerViewController =  UIDocumentPickerViewController(forOpeningContentTypes: [UTType.audio, UTType.text], asCopy: true)
         documentPickerViewController.delegate = context.coordinator
         return documentPickerViewController
     }
