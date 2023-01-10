@@ -62,20 +62,21 @@ func overwriteFile(TargetFilePath: String, OverwriteFilePath: String) -> String 
     let base = "0123456789"
     let randomStr = String((0..<2).map{ _ in base.randomElement()! })
     let fileManager = FileManager.default
-    let filePath =  NSHomeDirectory() + "/Documents/"+OverwriteFilePath
-    guard fileManager.fileExists(atPath: filePath) else {
+    let filePath = fileManager.urls(for: .libraryDirectory,
+                                        in: .userDomainMask)[0].appendingPathComponent(OverwriteFilePath)
+    guard fileManager.fileExists(atPath: filePath.path) else {
         print("ファイル読み込みエラー")
         return "(Error) File Not Exist - "+randomStr
     }
     print(OverwriteFilePath)
-    let OverwriteFileData = try! Data(contentsOf:URL(fileURLWithPath: filePath))
+    let OverwriteFileData = try! Data(contentsOf:URL(fileURLWithPath: filePath.path))
     let fd = open(TargetFilePath, O_RDONLY | O_CLOEXEC)
     defer { close(fd) }
 
     let originalSize = lseek(fd, 0, SEEK_END)
     guard originalSize >= OverwriteFileData.count else {
       print("FileSize too big")
-      return "(Error) FileSize too big - "+randomStr
+      return "(Error) FileSize too big\n"+String(originalSize)+" > "+String(OverwriteFileData.count)
     }
     lseek(fd, 0, SEEK_SET)
 

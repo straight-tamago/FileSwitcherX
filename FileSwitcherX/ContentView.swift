@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import MobileCoreServices
 
 struct TargetFilesPath_Struct: Identifiable, Hashable {
     var id = UUID()
@@ -456,20 +457,25 @@ struct DocumentPickerView : UIViewControllerRepresentable {
         }
         
         func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
-            
+            self.parent.LogMessage = "Copying..."
             let fileManager = FileManager.default
             let base = "0123456789"
             let randomStr = String((0..<10).map{ _ in base.randomElement()! })
-            let filePath =  NSHomeDirectory() + "/Documents/"+randomStr
-            do {
-                try fileManager.copyItem(at: url, to: URL(fileURLWithPath: filePath))
-            } catch {
-                print("コピー失敗")
-                print(error.localizedDescription)
-                self.parent.TargetFilesPath_Dict[self.parent.Picker_index].TargetFilesPath_Dict[self.parent.Picker_index_2].Replace = false
-                return
+            let filePath = fileManager.urls(for: .libraryDirectory,
+                                                in: .userDomainMask)[0].appendingPathComponent(randomStr)
+            if url.startAccessingSecurityScopedResource() {
+                do {
+                    self.parent.LogMessage = "Copy OK..."
+                    try fileManager.moveItem(at: url, to: filePath)
+                } catch {
+                    self.parent.LogMessage = "Copy Error..."
+                    print("コピー失敗")
+                    print(error.localizedDescription)
+//                    self.parent.LogMessage = error.localizedDescription+url.absoluteString
+                    self.parent.TargetFilesPath_Dict[self.parent.Picker_index].TargetFilesPath_Dict[self.parent.Picker_index_2].Replace = false
+                    return
+                }
             }
-            
             let re1 = overwriteFile(
                 TargetFilePath: self.parent.TargetFilesPath_Dict[self.parent.Picker_index].TargetFilesPath_Dict[self.parent.Picker_index_2].TargetFilePath,
                 OverwriteFilePath: randomStr)
@@ -486,14 +492,15 @@ struct DocumentPickerView : UIViewControllerRepresentable {
             self.parent.TargetFilesPath_Dict[self.parent.Picker_index].TargetFilesPath_Dict[self.parent.Picker_index_2].Disable = false
             UserDefaults.standard.set(false, forKey: self.parent.TargetFilesPath_Dict[self.parent.Picker_index].TargetFilesPath_Dict[self.parent.Picker_index_2].TargetFilePath)
         }
-        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {self.parent.TargetFilesPath_Dict[self.parent.Picker_index].TargetFilesPath_Dict[self.parent.Picker_index_2].Replace = false
+        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+            self.parent.TargetFilesPath_Dict[self.parent.Picker_index].TargetFilesPath_Dict[self.parent.Picker_index_2].Replace = false
         }
     }
     
     func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
 //        let path = NSString(string: self.TargetFilesPath_Dict[self.Picker_index].TargetFilesPath_Dict[self.Picker_index_2].TargetFilePath)
 //        let types = UTType.types(tag: path.pathExtension, tagClass: UTTagClass.filenameExtension, conformingTo: nil)
-        let documentPickerViewController =  UIDocumentPickerViewController(forOpeningContentTypes: [UTType.audio, UTType.text], asCopy: true)
+        let documentPickerViewController = UIDocumentPickerViewController(documentTypes: [String(kUTTypeData)], in: .open)
         documentPickerViewController.delegate = context.coordinator
         return documentPickerViewController
     }

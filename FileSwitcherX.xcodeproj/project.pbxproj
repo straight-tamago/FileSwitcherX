@@ -283,7 +283,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"FileSwitcherX/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = WQL5MJWHM6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FileSwitcherX/Info.plist;
@@ -302,7 +302,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.8;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherX";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherXs";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "FileSwitcherX/FileSwitcherX-Bridging-Header.h";
@@ -321,7 +321,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"FileSwitcherX/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = WQL5MJWHM6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FileSwitcherX/Info.plist;
@@ -340,7 +340,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.8;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherX";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherXs";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "FileSwitcherX/FileSwitcherX-Bridging-Header.h";
