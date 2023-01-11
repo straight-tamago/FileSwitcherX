@@ -138,41 +138,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        /* ここで位置情報を取得、保存する */
-        print("Update")
-        TargetFilesPath_Dict.forEach { item in
-            item.TargetFilesPath_Dict.forEach { item_2 in
-                if UserDefaults.standard.bool(forKey:item_2.TargetFilePath) == true {
-                    let _ = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: "xxx")
-                }else {
-                    print("sss"+item_2.ReplaceFilePath)
-                    let ReplaceFilePath = UserDefaults.standard.string(forKey: item_2.TargetFilePath+"_ReplaceFilePath") ?? ""
-                    if ReplaceFilePath != "" {
-                        if UserDefaults.standard.bool(forKey:item_2.TargetFilePath+"_Replace") == true {
-                            let _ = overwriteFile(TargetFilePath: item_2.TargetFilePath, OverwriteFilePath: ReplaceFilePath)
-                        }else {
-                            let _ = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: item_2.DefaultFileHeader)
-                        }
-                    }
-                }
-            }
-        }
+        print("OK")
     }
-    
-//    // アプリがバックグランドの状態でアプリアイコンを押す
-//    func applicationWillEnterForeground(_ application: UIApplication) {
-//        if UserDefaults.standard.bool(forKey: "Location") == true {
-//            locationManager.stopMonitoringSignificantLocationChanges()
-//            locationManager.stopUpdatingLocation()
-//        }
-//    }
-//    // アプリをバックグランドへ
-//    func applicationDidEnterBackground(_ application: UIApplication) {
-//        if UserDefaults.standard.bool(forKey: "Location") == true {
-//            locationManager.requestWhenInUseAuthorization()
-//            locationManager.requestAlwaysAuthorization()
-//            locationManager.startUpdatingLocation()
-//            locationManager.startMonitoringSignificantLocationChanges()
-//        }
-//    }
 }

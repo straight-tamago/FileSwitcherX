@@ -278,6 +278,9 @@ struct ContentView: View {
                 print("List refresh")
                 TargetFilesPath_Dict[0].TargetFilesPath_Dict[0].id = UUID()
             }
+            Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { timer in
+                FileSwitch_background()
+            }
         }
         .onChange(of: scenePhase) { phase in
             if phase == .active {
@@ -399,6 +402,7 @@ struct ContentView: View {
     
     
     func FileSwitch() -> (Void) {
+        print("FileSwitch")
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
         TargetFilesPath_Dict.forEach { item in
             item.TargetFilesPath_Dict.forEach { item_2 in
@@ -423,6 +427,26 @@ struct ContentView: View {
                             LogMessage = overwriteFile(TargetFilePath: item_2.TargetFilePath, OverwriteFilePath: item_2.ReplaceFilePath)
                         }else {
                             LogMessage = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: item_2.DefaultFileHeader)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func FileSwitch_background() -> (Void) {
+        print("FileSwitch_background")
+        TargetFilesPath_Dict.forEach { item in
+            item.TargetFilesPath_Dict.forEach { item_2 in
+                if UserDefaults.standard.bool(forKey:item_2.TargetFilePath) == true {
+                    let _ = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: "xxx")
+                }else {
+                    let ReplaceFilePath = UserDefaults.standard.string(forKey: item_2.TargetFilePath+"_ReplaceFilePath") ?? ""
+                    if ReplaceFilePath != "" {
+                        if UserDefaults.standard.bool(forKey:item_2.TargetFilePath+"_Replace") == true {
+                            let _ = overwriteFile(TargetFilePath: item_2.TargetFilePath, OverwriteFilePath: ReplaceFilePath)
+                        }else {
+                            let _ = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: item_2.DefaultFileHeader)
                         }
                     }
                 }
