@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3D0C0300296BE15A005D927F /* vm_unaligned_copy_switch_race.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D0C02FE296BE15A005D927F /* vm_unaligned_copy_switch_race.c */; };
+		3D24ADFD296E7218009490D3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3D24ADFF296E7218009490D3 /* Localizable.strings */; };
 		3D937D5B29675145000A6B15 /* FileSwitcherXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D937D5A29675145000A6B15 /* FileSwitcherXApp.swift */; };
 		3D937D5D29675145000A6B15 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D937D5C29675145000A6B15 /* ContentView.swift */; };
 		3D937D5F2967514A000A6B15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D937D5E2967514A000A6B15 /* Assets.xcassets */; };
@@ -18,6 +19,7 @@
 /* Begin PBXFileReference section */
 		3D0C02FE296BE15A005D927F /* vm_unaligned_copy_switch_race.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vm_unaligned_copy_switch_race.c; path = exploit/vm_unaligned_copy_switch_race.c; sourceTree = "<group>"; };
 		3D0C02FF296BE15A005D927F /* vm_unaligned_copy_switch_race.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vm_unaligned_copy_switch_race.h; path = exploit/vm_unaligned_copy_switch_race.h; sourceTree = "<group>"; };
+		3D24ADFE296E7218009490D3 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3D937D5729675145000A6B15 /* FileSwitcherX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FileSwitcherX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D937D5A29675145000A6B15 /* FileSwitcherXApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSwitcherXApp.swift; sourceTree = "<group>"; };
 		3D937D5C29675145000A6B15 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 		3D937D5929675145000A6B15 /* FileSwitcherX */ = {
 			isa = PBXGroup;
 			children = (
+				3D24ADFF296E7218009490D3 /* Localizable.strings */,
 				3DD9D5B6296803EC000D403B /* Info.plist */,
 				3D937D5A29675145000A6B15 /* FileSwitcherXApp.swift */,
 				3D937D5C29675145000A6B15 /* ContentView.swift */,
@@ -121,6 +124,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ja,
 				Base,
 			);
 			mainGroup = 3D937D4E29675145000A6B15;
@@ -139,6 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D937D622967514A000A6B15 /* Preview Assets.xcassets in Resources */,
+				3D24ADFD296E7218009490D3 /* Localizable.strings in Resources */,
 				3D937D5F2967514A000A6B15 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -158,6 +163,17 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		3D24ADFF296E7218009490D3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3D24ADFE296E7218009490D3 /* ja */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		3D937D632967514A000A6B15 /* Debug */ = {
@@ -281,7 +297,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FileSwitcherX/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
@@ -301,7 +317,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8;
+				MARKETING_VERSION = 0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherXs";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -319,7 +335,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FileSwitcherX/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
@@ -339,7 +355,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8;
+				MARKETING_VERSION = 0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherXs";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

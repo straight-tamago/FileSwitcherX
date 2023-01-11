@@ -22,23 +22,41 @@ struct FileSwitcherXApp: App {
 }
 
 
-class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
     var locationManager: CLLocationManager!
 
+    // アプリの起動時
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions:
     [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        locationManager = CLLocationManager()
-        locationManager.distanceFilter = 1
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.allowsBackgroundLocationUpdates = true //バックグラウンド処理を可能にする
-        locationManager.pausesLocationUpdatesAutomatically = false //ポーズしても位置取得を続ける
-        locationManager.delegate = self
-        locationManager.requestAlwaysAuthorization()
-        locationManager.startUpdatingLocation()
         
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
+
         return true
     }
     
+    @objc func appMovedToBackground() {
+        print("App moved to background!")
+        if UserDefaults.standard.bool(forKey: "Location") == true {
+            locationManager = CLLocationManager()
+            locationManager.requestAlwaysAuthorization()
+            locationManager.showsBackgroundLocationIndicator = true
+            locationManager.distanceFilter = 1
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.allowsBackgroundLocationUpdates = true //バックグラウンド処理を可能にする
+            locationManager.pausesLocationUpdatesAutomatically = false //ポーズしても位置取得を続ける
+            locationManager.delegate = self
+            
+            locationManager.startMonitoringSignificantLocationChanges()
+            locationManager.startUpdatingLocation()
+        }
+    }
+    @objc func appMovedToForeground() {
+        print("App moved to foreground!")
+        locationManager.stopMonitoringSignificantLocationChanges()
+        locationManager.stopUpdatingLocation()
+    }
+
     @State var TargetFilesPath_Dict: [TargetFilesPath_Dict_Struct] = [
         TargetFilesPath_Dict_Struct(
             Header: "SpringBoard",
@@ -125,15 +143,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         TargetFilesPath_Dict.forEach { item in
             item.TargetFilesPath_Dict.forEach { item_2 in
                 if UserDefaults.standard.bool(forKey:item_2.TargetFilePath) == true {
-                    overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: "xxx")
+                    let _ = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: "xxx")
                 }else {
                     print("sss"+item_2.ReplaceFilePath)
                     let ReplaceFilePath = UserDefaults.standard.string(forKey: item_2.TargetFilePath+"_ReplaceFilePath") ?? ""
                     if ReplaceFilePath != "" {
                         if UserDefaults.standard.bool(forKey:item_2.TargetFilePath+"_Replace") == true {
-                            overwriteFile(TargetFilePath: item_2.TargetFilePath, OverwriteFilePath: ReplaceFilePath)
+                            let _ = overwriteFile(TargetFilePath: item_2.TargetFilePath, OverwriteFilePath: ReplaceFilePath)
                         }else {
-                            overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: item_2.DefaultFileHeader)
+                            let _ = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: item_2.DefaultFileHeader)
                         }
                     }
                 }
@@ -141,18 +159,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
     }
     
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        locationManager.startMonitoringSignificantLocationChanges()
-        locationManager.startUpdatingLocation()
-    }
-    
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        locationManager.stopUpdatingLocation()
-        locationManager.startMonitoringSignificantLocationChanges()
-    }
-    
-    func willFinishLaunchingWithOptions(_ application: UIApplication) {
-        locationManager.stopUpdatingLocation()
-        locationManager.startMonitoringSignificantLocationChanges()
-    }
+//    // アプリがバックグランドの状態でアプリアイコンを押す
+//    func applicationWillEnterForeground(_ application: UIApplication) {
+//        if UserDefaults.standard.bool(forKey: "Location") == true {
+//            locationManager.stopMonitoringSignificantLocationChanges()
+//            locationManager.stopUpdatingLocation()
+//        }
+//    }
+//    // アプリをバックグランドへ
+//    func applicationDidEnterBackground(_ application: UIApplication) {
+//        if UserDefaults.standard.bool(forKey: "Location") == true {
+//            locationManager.requestWhenInUseAuthorization()
+//            locationManager.requestAlwaysAuthorization()
+//            locationManager.startUpdatingLocation()
+//            locationManager.startMonitoringSignificantLocationChanges()
+//        }
+//    }
 }

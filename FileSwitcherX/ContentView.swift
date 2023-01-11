@@ -8,6 +8,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 import MobileCoreServices
+import CoreLocation
 
 struct TargetFilesPath_Struct: Identifiable, Hashable {
     var id = UUID()
@@ -197,9 +198,9 @@ struct ContentView: View {
 
     var body: some View {
         List {
-            ForEach(TargetFilesPath_Dict.indices) { index in
+            ForEach(TargetFilesPath_Dict.indices, id: \.self) { index in
                 Section(header: Text(TargetFilesPath_Dict[index].Header)) {
-                    ForEach(TargetFilesPath_Dict[index].TargetFilesPath_Dict.indices) { index_2 in
+                    ForEach(TargetFilesPath_Dict[index].TargetFilesPath_Dict.indices, id: \.self) { index_2 in
                         HStack {
                             Text(TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFileTitle)+Text(TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].LocationRequired).foregroundColor(.green)
                         }
@@ -294,9 +295,6 @@ struct ContentView: View {
                 )
             }
         HStack {
-//            Button("Carrier Name") {
-//                plistChange(plistPath: "/var/mobile/Library/Carrier Bundles/Overlay/device+carrier+44010+D431+50.0.plist", key: "StatusBarCarrierName", value: "codomo")
-//            }
             Button("Apply") {
                 FileSwitch()
                 self.Respring_confirm = true
@@ -340,6 +338,18 @@ struct ContentView: View {
                         else {
                             Notcompatiblewithios14 = true
                         }
+                    },
+                    .default(Text("\(NSLocalizedString("Run in background (Status: ", comment: ""))"+String(UserDefaults.standard.bool(forKey: "Location"))+")")) {
+                        if UserDefaults.standard.bool(forKey: "Location") == true {
+                            UserDefaults.standard.set(false, forKey: "Location")
+                        }else {
+                            UserDefaults.standard.set(true, forKey: "Location")
+                        }
+                        UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
+                        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
+                                    exit(0)
+                                }
+
                     },
                     .default(Text("\(NSLocalizedString("Update Check", comment: ""))")) {
                         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
@@ -466,7 +476,7 @@ struct DocumentPickerView : UIViewControllerRepresentable {
             if url.startAccessingSecurityScopedResource() {
                 do {
                     self.parent.LogMessage = "Copy OK..."
-                    try fileManager.moveItem(at: url, to: filePath)
+                    try fileManager.copyItem(at: url, to: filePath)
                 } catch {
                     self.parent.LogMessage = "Copy Error..."
                     print("コピー失敗")
