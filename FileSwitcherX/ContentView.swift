@@ -399,11 +399,11 @@ struct ContentView: View {
     
     
     func FileSwitch() -> (Void) {
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
         TargetFilesPath_Dict.forEach { item in
             item.TargetFilesPath_Dict.forEach { item_2 in
                 for i in 0..<5 {
                     DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(i/10)) {
-                        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
                         if item_2.Disable == true {
                             LogMessage = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: "xxx")
                         }else {
