@@ -14,16 +14,23 @@ struct TargetFilesPath_Struct: Identifiable, Hashable {
     var id = UUID()
     let TargetFileTitle: String
     let TargetFilePath: String
-    let LocationRequired: String
+    let LocationRequired: Bool
     let DefaultFileHeader: String
     var Disable: Bool = false
     var Replace: Bool = false
     var ReplaceFilePath: String = ""
+    var OverWriteFiles_Dict: [OverWriteFiles_Struct] = []
 }
 struct TargetFilesPath_Dict_Struct: Identifiable, Hashable {
     var id = UUID()
     var Header: String
     var TargetFilesPath_Dict: [TargetFilesPath_Struct]
+}
+struct OverWriteFiles_Struct: Identifiable, Hashable {
+    var id = UUID()
+    var Name: String
+    var Path: URL
+    var Image: URL
 }
 
 struct ContentView: View {
@@ -40,6 +47,9 @@ struct ContentView: View {
     @State private var showingPicker = false
     @State var Picker_index = 0
     @State var Picker_index_2 = 0
+    
+    @State private var ReplaceModeShowing = false
+    @State private var ReplaceChoose = false
 
     @State var TargetFilesPath_Dict: [TargetFilesPath_Dict_Struct] = [
         TargetFilesPath_Dict_Struct(
@@ -48,49 +58,113 @@ struct ContentView: View {
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Homebar (Assets.car)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/MaterialKit.framework/Assets.car",
-                    LocationRequired: "",
+                    LocationRequired: false,
                     DefaultFileHeader: "BOM"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Dock Dark\n(dockDark.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockDark.materialrecipe",
-                    LocationRequired: "\n[Location service required]",
-                    DefaultFileHeader: "bpl"
+                    LocationRequired: true,
+                    DefaultFileHeader: "bpl",
+                    OverWriteFiles_Dict: [
+                        OverWriteFiles_Struct(
+                            Name: "Black",
+                            Path:  Bundle.main.url(
+                                forResource: "Dock/Black/dockDark_Black.materialrecipe", withExtension: nil, subdirectory: "OverWriteFiles")!,
+                            Image:  Bundle.main.url(
+                                forResource: "Dock/Black/dock_Black.jpg", withExtension: nil, subdirectory: "OverWriteFiles")!
+                        ),
+                        OverWriteFiles_Struct(
+                            Name: "White",
+                            Path:  Bundle.main.url(
+                                forResource: "Dock/White/dockDark_White.materialrecipe", withExtension: nil, subdirectory: "OverWriteFiles")!,
+                            Image:  Bundle.main.url(
+                                forResource: "Dock/White/dock_White.jpg", withExtension: nil, subdirectory: "OverWriteFiles")!
+                        )
+                    ]
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Dock Light\n(dockLight.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockLight.materialrecipe",
-                    LocationRequired: "\n[Location service required]",
-                    DefaultFileHeader: "bpl"
+                    LocationRequired: true,
+                    DefaultFileHeader: "bpl",
+                    OverWriteFiles_Dict: [
+                        OverWriteFiles_Struct(
+                            Name: "Black",
+                            Path:  Bundle.main.url(
+                                forResource: "Dock/Black/dockLight_Black.materialrecipe", withExtension: nil, subdirectory: "OverWriteFiles")!,
+                            Image:  Bundle.main.url(
+                                forResource: "Dock/Black/dock_Black.jpg", withExtension: nil, subdirectory: "OverWriteFiles")!
+                        ),
+                        OverWriteFiles_Struct(
+                            Name: "White",
+                            Path:  Bundle.main.url(
+                                forResource: "Dock/White/dockLight_White.materialrecipe", withExtension: nil, subdirectory: "OverWriteFiles")!,
+                            Image:  Bundle.main.url(
+                                forResource: "Dock/White/dock_White.jpg", withExtension: nil, subdirectory: "OverWriteFiles")!
+                        )
+                    ]
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Folder Dark\n(folderDark.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderDark.materialrecipe",
-                    LocationRequired: "\n[Location service required]",
-                    DefaultFileHeader: "bpl"
+                    LocationRequired: true,
+                    DefaultFileHeader: "bpl",
+                    OverWriteFiles_Dict: [
+                        OverWriteFiles_Struct(
+                            Name: "Black",
+                            Path:  Bundle.main.url(
+                                forResource: "Folder/Black/folderDark_Black.materialrecipe", withExtension: nil, subdirectory: "OverWriteFiles")!,
+                            Image:  Bundle.main.url(
+                                forResource: "Folder/Black/folder_Black.jpg", withExtension: nil, subdirectory: "OverWriteFiles")!
+                        ),
+                        OverWriteFiles_Struct(
+                            Name: "White",
+                            Path:  Bundle.main.url(
+                                forResource: "Folder/White/folderDark_White.materialrecipe", withExtension: nil, subdirectory: "OverWriteFiles")!,
+                            Image:  Bundle.main.url(
+                                forResource: "Folder/White/folder_White.jpg", withExtension: nil, subdirectory: "OverWriteFiles")!
+                        )
+                    ]
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Folder Light\n(folderDark.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderLight.materialrecipe",
-                    LocationRequired: "\n[Location service required]",
-                    DefaultFileHeader: "bpl"
+                    LocationRequired: true,
+                    DefaultFileHeader: "bpl",
+                    OverWriteFiles_Dict: [
+                        OverWriteFiles_Struct(
+                            Name: "Black",
+                            Path:  Bundle.main.url(
+                                forResource: "Folder/Black/folderLight_Black.materialrecipe", withExtension: nil, subdirectory: "OverWriteFiles")!,
+                            Image:  Bundle.main.url(
+                                forResource: "Folder/Black/folder_Black.jpg", withExtension: nil, subdirectory: "OverWriteFiles")!
+                        ),
+                        OverWriteFiles_Struct(
+                            Name: "White",
+                            Path:  Bundle.main.url(
+                                forResource: "Folder/White/folderLight_White.materialrecipe", withExtension: nil, subdirectory: "OverWriteFiles")!,
+                            Image:  Bundle.main.url(
+                                forResource: "Folder/White/folder_White.jpg", withExtension: nil, subdirectory: "OverWriteFiles")!
+                        )
+                    ]
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Folder Blur\n(folderExpandedBackgroundHome.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderExpandedBackgroundHome.materialrecipe",
-                    LocationRequired: "\n[Location service required]",
+                    LocationRequired: true,
                     DefaultFileHeader: "bpl"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Switcher Blur\n(homeScreenBackdrop-application.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoard.framework/homeScreenBackdrop-application.materialrecipe",
-                    LocationRequired: "",
+                    LocationRequired: false,
                     DefaultFileHeader: "bpl"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Shortcut Banner\n(BannersAuthorizedBundleIDs.plist)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoard.framework/BannersAuthorizedBundleIDs.plist",
-                    LocationRequired: "",
+                    LocationRequired: false,
                     DefaultFileHeader: "bpl"
                 ),
             ]
@@ -101,31 +175,31 @@ struct ContentView: View {
                 TargetFilesPath_Struct(
                     TargetFileTitle: "key_press_click.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/key_press_click.caf",
-                    LocationRequired: "",
+                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "key_press_delete.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/key_press_delete.caf",
-                    LocationRequired: "",
+                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "key_press_modifier.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/key_press_modifier.caf",
-                    LocationRequired: "",
+                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Tock.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/Tock.caf",
-                    LocationRequired: "",
+                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Tink.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/Tink.caf",
-                    LocationRequired: "",
+                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
             ]
@@ -136,37 +210,37 @@ struct ContentView: View {
                 TargetFilesPath_Struct(
                     TargetFileTitle: "photoShutter.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/photoShutter.caf",
-                    LocationRequired: "\n[Location service required]",
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "begin_record.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/begin_record.caf",
-                    LocationRequired: "\n[Location service required]",
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "end_record.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/end_record.caf",
-                    LocationRequired: "\n[Location service required]",
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "camera_shutter_burst.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/Modern/camera_shutter_burst.caf",
-                    LocationRequired: "\n[Location service required]",
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "camera_shutter_burst_begin.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/Modern/camera_shutter_burst_begin.caf",
-                    LocationRequired: "\n[Location service required]",
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "camera_shutter_burst_end.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/Modern/camera_shutter_burst_end.caf",
-                    LocationRequired: "\n[Location service required]",
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
             ]
@@ -177,19 +251,19 @@ struct ContentView: View {
                 TargetFilesPath_Struct(
                     TargetFileTitle: "lock.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/lock.caf",
-                    LocationRequired: "",
+                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "low_power.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/low_power.caf",
-                    LocationRequired: "",
+                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "connect_power.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/connect_power.caf",
-                    LocationRequired: "",
+                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 )
             ]
@@ -202,7 +276,7 @@ struct ContentView: View {
                 Section(header: Text(TargetFilesPath_Dict[index].Header)) {
                     ForEach(TargetFilesPath_Dict[index].TargetFilesPath_Dict.indices, id: \.self) { index_2 in
                         HStack {
-                            Text(TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFileTitle)+Text(TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].LocationRequired).foregroundColor(.green)
+                            Text(TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFileTitle)+Text(TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].LocationRequired ? "\n[Location service required]" : "").foregroundColor(.green)
                         }
                         HStack {
                             VStack {
@@ -213,7 +287,7 @@ struct ContentView: View {
                                     Toggle(isOn: $TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].Disable) {
                                         HStack {
                                             Spacer()
-                                            Text(TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].Disable ? "File Disable" : "File Enable")
+                                            Text(TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].Disable ? "To Disable" : "To Enable")
                                         }
                                     }.onChange(of: TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].Disable) { newValue in
                                         UserDefaults.standard.set(newValue, forKey: TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath)
@@ -235,22 +309,90 @@ struct ContentView: View {
                                             Text(TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].Replace ? "Replace ON" : "Replace OFF")
                                         }
                                     }.onChange(of: TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].Replace) { newValue in
-                                        UserDefaults.standard.set(newValue, forKey: TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath+"_Replace")
                                         if newValue == true {
                                             Picker_index =  index
                                             Picker_index_2 = index_2
-                                            showingPicker = true
+                                            ReplaceModeShowing = true
                                         }else {
                                             UserDefaults.standard.set(nil, forKey: TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath+"_ReplaceFilePath")
                                             TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].ReplaceFilePath = ""
-                                            do {
-                                                try FileManager.default.removeItem(atPath: NSHomeDirectory() + "/Documents/"+TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].ReplaceFilePath)
-                                            } catch {
-                                                print(error.localizedDescription)
+//                                            do {
+//                                                var fileManager = FileManager.default
+//                                                var filePath = fileManager.urls(for: .libraryDirectory,
+//                                                                                    in: .userDomainMask)[0].appendingPathComponent(TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].ReplaceFilePath)
+//                                                try fileManager.removeItem(at: filePath)
+//                                            } catch {
+//                                                print(error.localizedDescription)
+//                                            }
+                                            TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].id = UUID()
+                                        }
+                                    }
+                                    .actionSheet(isPresented: $ReplaceModeShowing) {
+                                        ActionSheet(title: Text("Replace Mode"), message: Text(""), buttons:[
+                                            .default(Text("Choose")) {
+                                                print("Choose")
+                                                ReplaceChoose = true
+//                                                TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].Replace = false
+                                            },
+                                            .default(Text("Import File")) {
+                                                print("Import File")
+                                                showingPicker = true
+                                            },
+                                            .cancel() {
+                                                TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].Replace = false
+                                            }
+                                        ])
+                                    }
+                                }
+                                .sheet(isPresented: $ReplaceChoose) {
+                                    List {
+                                        ForEach(TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].OverWriteFiles_Dict.indices, id: \.self) { index_3 in
+                                            Button(action: {
+                                                ReplaceChoose = false
+                                                LogMessage = "Copying..."
+                                                var fileManager = FileManager.default
+                                                var randomStr = TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].OverWriteFiles_Dict[index_3].Name
+                                                var filePath = fileManager.urls(for: .libraryDirectory,
+                                                                                    in: .userDomainMask)[0].appendingPathComponent(randomStr)
+                                                do {
+                                                    LogMessage = "Copy OK..."
+                                                    if fileManager.fileExists(atPath: filePath.path) {
+                                                        try fileManager.removeItem(at: filePath)
+                                                    }
+                                                    try fileManager.copyItem(at: TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].OverWriteFiles_Dict[index_3].Path, to: filePath)
+                                                } catch {
+                                                    LogMessage = "Copy Error..."
+                                                    print("コピー失敗")
+                                                    print(error.localizedDescription)
+                                //                    self.parent.LogMessage = error.localizedDescription+url.absoluteString
+                                                    TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].Replace = false
+                                                    return
+                                                }
+                                                let re1 = overwriteFile(
+                                                    TargetFilePath: TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].TargetFilePath,
+                                                    OverwriteFilePath: randomStr)
+                                                LogMessage = re1
+                                                if re1.contains("Error") {
+                                                    TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].Replace = false
+                                                    return
+                                                }
+                                                fileUrl = URL(string: randomStr)
+                                                TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].ReplaceFilePath = randomStr
+                                                UserDefaults.standard.set(randomStr, forKey: TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].TargetFilePath+"_ReplaceFilePath")
+
+                                                TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].Disable = false
+                                                UserDefaults.standard.set(false, forKey: TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].TargetFilePath)
+                                                TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].Replace = true
+                                            }) {
+                                                VStack {
+                                                    Image(uiImage: getImageByUrl(url: TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].OverWriteFiles_Dict[index_3].Image))
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                    Text(TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].OverWriteFiles_Dict[index_3].Name)
+                                                }
                                             }
                                         }
-                                        TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].id = UUID()
-                                    }
+                                    }.listStyle(PlainListStyle())
                                 }
                                 Divider()
                                     .frame(height: 1)
@@ -406,8 +548,21 @@ struct ContentView: View {
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
         TargetFilesPath_Dict.forEach { item in
             item.TargetFilesPath_Dict.forEach { item_2 in
-                for i in 0..<5 {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(i/10)) {
+                if item_2.LocationRequired == true {
+                    for i in 0..<5 {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.seconds(i/10)) {
+                            if item_2.Disable == true {
+                                LogMessage = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: "xxx")
+                            }else {
+                                if item_2.Replace == true {
+                                    LogMessage = overwriteFile(TargetFilePath: item_2.TargetFilePath, OverwriteFilePath: item_2.ReplaceFilePath)
+                                }else {
+                                    LogMessage = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: item_2.DefaultFileHeader)
+                                }
+                            }
+                        }
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         if item_2.Disable == true {
                             LogMessage = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: "xxx")
                         }else {
@@ -416,17 +571,6 @@ struct ContentView: View {
                             }else {
                                 LogMessage = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: item_2.DefaultFileHeader)
                             }
-                        }
-                    }
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    if item_2.Disable == true {
-                        LogMessage = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: "xxx")
-                    }else {
-                        if item_2.Replace == true {
-                            LogMessage = overwriteFile(TargetFilePath: item_2.TargetFilePath, OverwriteFilePath: item_2.ReplaceFilePath)
-                        }else {
-                            LogMessage = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: item_2.DefaultFileHeader)
                         }
                     }
                 }
@@ -442,12 +586,10 @@ struct ContentView: View {
                     let _ = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: "xxx")
                 }else {
                     let ReplaceFilePath = UserDefaults.standard.string(forKey: item_2.TargetFilePath+"_ReplaceFilePath") ?? ""
-                    if ReplaceFilePath != "" {
-                        if UserDefaults.standard.bool(forKey:item_2.TargetFilePath+"_Replace") == true {
-                            let _ = overwriteFile(TargetFilePath: item_2.TargetFilePath, OverwriteFilePath: ReplaceFilePath)
-                        }else {
-                            let _ = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: item_2.DefaultFileHeader)
-                        }
+                    if ReplaceFilePath == "" {
+                        let _ = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: item_2.DefaultFileHeader)
+                    }else {
+                        let _ = overwriteFile(TargetFilePath: item_2.TargetFilePath, OverwriteFilePath: ReplaceFilePath)
                     }
                 }
             }
@@ -458,7 +600,7 @@ struct ContentView: View {
         for index in TargetFilesPath_Dict.indices {
             for index_2 in TargetFilesPath_Dict[index].TargetFilesPath_Dict.indices {
                 TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].Disable = UserDefaults.standard.bool(forKey: TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath)
-                TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].Replace = UserDefaults.standard.bool(forKey: TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath+"_Replace")
+                TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].Replace = UserDefaults.standard.string(forKey: TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath+"_ReplaceFilePath") != nil ? true : false
                 TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].ReplaceFilePath = UserDefaults.standard.string(forKey: TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath+"_ReplaceFilePath") ?? ""
             }
         }
@@ -492,10 +634,10 @@ struct DocumentPickerView : UIViewControllerRepresentable {
         
         func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
             self.parent.LogMessage = "Copying..."
-            let fileManager = FileManager.default
-            let base = "0123456789"
-            let randomStr = String((0..<10).map{ _ in base.randomElement()! })
-            let filePath = fileManager.urls(for: .libraryDirectory,
+            var fileManager = FileManager.default
+            var base = "0123456789"
+            var randomStr = String((0..<10).map{ _ in base.randomElement()! })
+            var filePath = fileManager.urls(for: .libraryDirectory,
                                                 in: .userDomainMask)[0].appendingPathComponent(randomStr)
             if url.startAccessingSecurityScopedResource() {
                 do {
@@ -544,4 +686,15 @@ struct DocumentPickerView : UIViewControllerRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
+}
+
+func getImageByUrl(url: URL) -> UIImage{
+    print(url)
+    do {
+        let data = try Data(contentsOf: url)
+        return UIImage(data: data)!
+    } catch let err {
+        print("Error : \(err.localizedDescription)")
+    }
+    return UIImage()
 }
