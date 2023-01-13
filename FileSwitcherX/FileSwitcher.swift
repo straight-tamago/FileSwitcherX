@@ -8,17 +8,6 @@
 import UIKit
 import SwiftUI
 
-//func overwriteAsync(TargetFilePath: String, completion: @escaping (String) -> Void) {
-//    DispatchQueue.global(qos: .userInteractive).async {
-//        let succeeded = overwrite(TargetFilePath: TargetFilePath)
-//        DispatchQueue.main.async {
-//            let base = "0123456789"
-//            let randomStr = String((0..<2).map{ _ in base.randomElement()! })
-//            completion(succeeded ? "Success - "+randomStr : "Error")
-//        }
-//    }
-//}
-
 func overwrite(TargetFilePath: String, OverwriteData: String) -> String {
     let base = "0123456789"
     let randomStr = String((0..<2).map{ _ in base.randomElement()! })
