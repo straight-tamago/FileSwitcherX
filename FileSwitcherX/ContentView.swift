@@ -62,7 +62,7 @@ struct ContentView: View {
                     DefaultFileHeader: "BOM"
                 ),
                 TargetFilesPath_Struct(
-                    TargetFileTitle: "Dock Dark\n(dockDark.materialrecipe)",
+                    TargetFileTitle: "Dock (in dark mode)\n(dockDark.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockDark.materialrecipe",
                     LocationRequired: true,
                     DefaultFileHeader: "bpl",
@@ -84,7 +84,7 @@ struct ContentView: View {
                     ]
                 ),
                 TargetFilesPath_Struct(
-                    TargetFileTitle: "Dock Light\n(dockLight.materialrecipe)",
+                    TargetFileTitle: "Dock (in light mode)\n(dockLight.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/CoreMaterial.framework/dockLight.materialrecipe",
                     LocationRequired: true,
                     DefaultFileHeader: "bpl",
@@ -106,7 +106,7 @@ struct ContentView: View {
                     ]
                 ),
                 TargetFilesPath_Struct(
-                    TargetFileTitle: "Folder Dark\n(folderDark.materialrecipe)",
+                    TargetFileTitle: "Folder (in dark mode)\n(folderDark.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderDark.materialrecipe",
                     LocationRequired: true,
                     DefaultFileHeader: "bpl",
@@ -128,7 +128,7 @@ struct ContentView: View {
                     ]
                 ),
                 TargetFilesPath_Struct(
-                    TargetFileTitle: "Folder Light\n(folderDark.materialrecipe)",
+                    TargetFileTitle: "Folder (in light mode)\n(folderDark.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderLight.materialrecipe",
                     LocationRequired: true,
                     DefaultFileHeader: "bpl",
@@ -153,13 +153,38 @@ struct ContentView: View {
                     TargetFileTitle: "Folder Blur\n(folderExpandedBackgroundHome.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoardHome.framework/folderExpandedBackgroundHome.materialrecipe",
                     LocationRequired: true,
-                    DefaultFileHeader: "bpl"
+                    DefaultFileHeader: "bpl",
+                    OverWriteFiles_Dict: [
+                        OverWriteFiles_Struct(
+                            Name: "Black",
+                            Path:  Bundle.main.url(
+                                forResource: "folderExpandedBackgroundHome/folderExpandedBackgroundHome_Black.materialrecipe", withExtension: nil, subdirectory: "OverWriteFiles")!,
+                            Image:  Bundle.main.url(
+                                forResource: "folderExpandedBackgroundHome/Black.jpg", withExtension: nil, subdirectory: "OverWriteFiles")!
+                        ),
+                        OverWriteFiles_Struct(
+                            Name: "White",
+                            Path:  Bundle.main.url(
+                                forResource: "folderExpandedBackgroundHome/folderExpandedBackgroundHome_White.materialrecipe", withExtension: nil, subdirectory: "OverWriteFiles")!,
+                            Image:  Bundle.main.url(
+                                forResource: "folderExpandedBackgroundHome/White.jpg", withExtension: nil, subdirectory: "OverWriteFiles")!
+                        )
+                    ]
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Switcher Blur\n(homeScreenBackdrop-application.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoard.framework/homeScreenBackdrop-application.materialrecipe",
                     LocationRequired: false,
-                    DefaultFileHeader: "bpl"
+                    DefaultFileHeader: "bpl",
+                    OverWriteFiles_Dict: [
+                        OverWriteFiles_Struct(
+                            Name: "Clear",
+                            Path:  Bundle.main.url(
+                                forResource: "homeScreenBackdrop-switcher/homeScreenBackdrop-switcher_Clear.materialrecipe", withExtension: nil, subdirectory: "OverWriteFiles")!,
+                            Image:  Bundle.main.url(
+                                forResource: "homeScreenBackdrop-switcher/Clear.jpg", withExtension: nil, subdirectory: "OverWriteFiles")!
+                        )
+                    ]
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Shortcut Banner\n(BannersAuthorizedBundleIDs.plist)",
