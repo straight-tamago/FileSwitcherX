@@ -191,13 +191,7 @@ struct ContentView: View {
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoard.framework/BannersAuthorizedBundleIDs.plist",
                     LocationRequired: false,
                     DefaultFileHeader: "bpl"
-                ),
-                TargetFilesPath_Struct(
-                    TargetFileTitle: "Shortcut Banner\n(BannersAuthorizedBundleIDs.plist)",
-                    TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoard.framework/BannersAuthorizedBundleIDs.plist",
-                    LocationRequired: false,
-                    DefaultFileHeader: "bpl"
-                ),
+                )
             ]
         ),
         TargetFilesPath_Dict_Struct(
