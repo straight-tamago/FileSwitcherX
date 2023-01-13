@@ -63,7 +63,7 @@ func overwriteFile(TargetFilePath: String, OverwriteFilePath: String) -> String 
     let randomStr = String((0..<2).map{ _ in base.randomElement()! })
     let fileManager = FileManager.default
     let filePath = fileManager.urls(for: .libraryDirectory,
-                                        in: .userDomainMask)[0].appendingPathComponent(OverwriteFilePath)
+                                        in: .userDomainMask)[0].appendingPathComponent(OverwriteFilePath+"-"+randomStr)
     guard fileManager.fileExists(atPath: filePath.path) else {
         print("ファイル読み込みエラー")
         return "(Error) File Not Exist - "+randomStr

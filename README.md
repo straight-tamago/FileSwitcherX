@@ -8,6 +8,5 @@ iOS 14 - 16.1.2
 
 # Credits
 - https://github.com/zhuowei (MacDirtyCow exploit)
-- https://twitter.com/i41nbeer (CVE-2022-46689)
 
 - https://twitter.com/straight_tamago (FileSwitcherX)

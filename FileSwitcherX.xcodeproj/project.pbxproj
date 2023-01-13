@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3D0C0300296BE15A005D927F /* vm_unaligned_copy_switch_race.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D0C02FE296BE15A005D927F /* vm_unaligned_copy_switch_race.c */; };
+		3D1D924629711080008925BE /* poc.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1D924429711080008925BE /* poc.m */; };
 		3D24ADFD296E7218009490D3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3D24ADFF296E7218009490D3 /* Localizable.strings */; };
 		3D937D5B29675145000A6B15 /* FileSwitcherXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D937D5A29675145000A6B15 /* FileSwitcherXApp.swift */; };
 		3D937D5D29675145000A6B15 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D937D5C29675145000A6B15 /* ContentView.swift */; };
@@ -20,6 +21,8 @@
 /* Begin PBXFileReference section */
 		3D0C02FE296BE15A005D927F /* vm_unaligned_copy_switch_race.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vm_unaligned_copy_switch_race.c; path = exploit/vm_unaligned_copy_switch_race.c; sourceTree = "<group>"; };
 		3D0C02FF296BE15A005D927F /* vm_unaligned_copy_switch_race.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vm_unaligned_copy_switch_race.h; path = exploit/vm_unaligned_copy_switch_race.h; sourceTree = "<group>"; };
+		3D1D924429711080008925BE /* poc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = poc.m; path = exploit/poc.m; sourceTree = "<group>"; };
+		3D1D924529711080008925BE /* poc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = poc.h; path = exploit/poc.h; sourceTree = "<group>"; };
 		3D24ADFE296E7218009490D3 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3D937D5729675145000A6B15 /* FileSwitcherX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FileSwitcherX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D937D5A29675145000A6B15 /* FileSwitcherXApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSwitcherXApp.swift; sourceTree = "<group>"; };
@@ -73,6 +76,8 @@
 				3DD9D59729676123000D403B /* FileSwitcherX-Bridging-Header.h */,
 				3D0C02FE296BE15A005D927F /* vm_unaligned_copy_switch_race.c */,
 				3D0C02FF296BE15A005D927F /* vm_unaligned_copy_switch_race.h */,
+				3D1D924429711080008925BE /* poc.m */,
+				3D1D924529711080008925BE /* poc.h */,
 			);
 			path = FileSwitcherX;
 			sourceTree = "<group>";
@@ -164,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D937D5D29675145000A6B15 /* ContentView.swift in Sources */,
+				3D1D924629711080008925BE /* poc.m in Sources */,
 				3D937D5B29675145000A6B15 /* FileSwitcherXApp.swift in Sources */,
 				3D0C0300296BE15A005D927F /* vm_unaligned_copy_switch_race.c in Sources */,
 				3DD9D596296760C5000D403B /* FileSwitcher.swift in Sources */,
@@ -325,7 +331,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -363,7 +369,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

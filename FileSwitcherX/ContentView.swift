@@ -167,6 +167,12 @@ struct ContentView: View {
                     LocationRequired: false,
                     DefaultFileHeader: "bpl"
                 ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "Shortcut Banner\n(BannersAuthorizedBundleIDs.plist)",
+                    TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoard.framework/BannersAuthorizedBundleIDs.plist",
+                    LocationRequired: false,
+                    DefaultFileHeader: "bpl"
+                ),
             ]
         ),
         TargetFilesPath_Dict_Struct(
@@ -281,8 +287,8 @@ struct ContentView: View {
                         HStack {
                             VStack {
                                 HStack {
-                                    Text("File Status:")
-                                    Text(IsSucceeded(TargetFilePath: "file://"+TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath) ? "OFF" : "ON").foregroundColor(IsSucceeded(TargetFilePath: "file://"+TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath) ? .green : .red)
+                                    Text("File disabled?:")
+                                    Text(IsSucceeded(TargetFilePath: "file://"+TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath) ? "Yes" : "No").foregroundColor(IsSucceeded(TargetFilePath: "file://"+TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath) ? .green : .red)
                                     Spacer()
                                     Toggle(isOn: $TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].Disable) {
                                         HStack {
@@ -698,3 +704,13 @@ func getImageByUrl(url: URL) -> UIImage{
     }
     return UIImage()
 }
+
+//    var newPlist = plist
+//    var s0 = newPlist["StatusBarImages"] as! [Dictionary<String, Any>]
+//    var s1 = s0[0]["StatusBarCarrierName"] as! String
+//    (s0[0]["StatusBarCarrierName"] as! String) = "ss"
+//    print(s1)
+//    let newData = try! PropertyListSerialization.data(fromPropertyList: newPlist, format: .binary, options: 0)
+//
+//    overwriteFileS(newData, plistPath)
+//}
