@@ -358,7 +358,7 @@ struct ContentView: View {
                                                 LogMessage = "Copying..."
                                                 var fileManager = FileManager.default
                                                 let base = "0123456789"
-                                                let randomStr_0 = String((0..<2).map{ _ in base.randomElement()! })
+                                                let randomStr_0 = String((0..<10).map{ _ in base.randomElement()! })
                                                 var randomStr = TargetFilesPath_Dict[Picker_index].TargetFilesPath_Dict[Picker_index_2].OverWriteFiles_Dict[index_3].Name+"-"+randomStr_0
                                                 var filePath = fileManager.urls(for: .libraryDirectory,
                                                                                     in: .userDomainMask)[0].appendingPathComponent(randomStr)
