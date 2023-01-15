@@ -5,20 +5,21 @@
   Created by mini on 2023/01/11.
   
 */
-//"Update Check" = "アップデート確認";
-//"Update available" = "最新版が利用可能";
-//"Do you want to download the update from the Github ?" = "Githubからダウンロード";
-//"OK" = "はい";
-//"Cancel" = "キャンセル";
-//"No Update" = "アップデートはありません";
-//"Apply" = "適用";
-//"Settings" = "設定";
-//"File Status:" = "ファイルの状態";
-//"File Disable" = "ファイル無効化";
-//"File Enable" = "ファイル有効化";
-//"Auto run when the app starts (Status: " = "アプリ起動時に適用を自動実行 (状態: ";
-//"by straight-tamago" = "by すとれーとたまご★";
-//"Path:" = "パス:";
-//"Replace OFF" = "置き換え OFF";
-//"Replace ON" = "置き換え ON";
-//"Location Settings (Status: " = "位置情報の設定 (状態: ";
+"Update Check" = "アップデート確認";
+"Update available" = "最新版が利用可能";
+"Do you want to download the update from the Github ?" = "Githubからダウンロード";
+"OK" = "はい";
+"Cancel" = "キャンセル";
+"No Update" = "アップデートはありません";
+"Apply" = "適用";
+"Settings" = "設定";
+"File disabled?:" = "無効化できたか:";
+"To Disable" = "無効化";
+"To Enable" = "有効化";
+"Auto run when the app starts (Status: " = "アプリ起動時に適用を自動実行 (状態: ";
+"by straight-tamago" = "by すとれーとたまご★";
+"Path:" = "パス:";
+"Replace OFF" = "置き換え OFF";
+"Replace ON" = "置き換え ON";
+"Run in background (Status: " = "バックグラウンド実行で状態維持 (状態: ";
+"\n[Location service required]" = "\n[位置情報サービスで状態維持可]";
