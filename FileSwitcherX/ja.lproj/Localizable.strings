@@ -23,3 +23,4 @@
 "Replace ON" = "置き換え ON";
 "Run in background (Status: " = "バックグラウンド実行で状態維持 (状態: ";
 "\n[Location service required]" = "\n[位置情報サービスで状態維持可]";
+"Location Indicator (Status: " = "バックグラウンド実行中はステータスバーに表示 (状態: "

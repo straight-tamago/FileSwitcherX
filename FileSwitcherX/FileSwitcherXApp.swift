@@ -40,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         if UserDefaults.standard.bool(forKey: "Location") == true {
             locationManager = CLLocationManager()
             locationManager.requestAlwaysAuthorization()
-            locationManager.showsBackgroundLocationIndicator = true
+            locationManager.showsBackgroundLocationIndicator = UserDefaults.standard.bool(forKey: "Location_Indicator")
             locationManager.distanceFilter = 1
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.allowsBackgroundLocationUpdates = true //バックグラウンド処理を可能にする

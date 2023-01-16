@@ -516,12 +516,24 @@ struct ContentView: View {
                             UserDefaults.standard.set(false, forKey: "Location")
                         }else {
                             UserDefaults.standard.set(true, forKey: "Location")
+                            UserDefaults.standard.set(true, forKey: "Location_Indicator")
                         }
                         UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
                         Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
                                     exit(0)
                                 }
 
+                    },
+                    .default(Text("\(NSLocalizedString("Location Indicator (Status: ", comment: ""))"+String(UserDefaults.standard.bool(forKey: "Location_Indicator"))+")")) {
+                        if UserDefaults.standard.bool(forKey: "Location_Indicator") == true {
+                            UserDefaults.standard.set(false, forKey: "Location_Indicator")
+                        }else {
+                            UserDefaults.standard.set(true, forKey: "Location_Indicator")
+                        }
+                        UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
+                        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
+                                    exit(0)
+                                }
                     },
                     .default(Text("\(NSLocalizedString("Update Check", comment: ""))")) {
                         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
