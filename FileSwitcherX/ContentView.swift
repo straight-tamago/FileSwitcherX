@@ -380,67 +380,71 @@ struct ContentView: View {
             Section(header: Text("Text Editor")) {
                 TextField("New CarrierName", text: $NewCarrierName)
                 Button("Set Carrier Name") {
-                    LogMessage_CarrierName = "[- Run -]\n"
-                    guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/var/mobile/Library/Carrier Bundles/Overlay/") else {
-                        LogMessage_CarrierName += "FileList Error\n"
-                        return
-                    }
-                    for file in files {
-                        LogMessage_CarrierName += file+"\n"
-                        let PlistPath = URL(fileURLWithPath: "/var/mobile/Library/Carrier Bundles/Overlay/"+file)
-                        let PlistData = try! Data(contentsOf: URL(fileURLWithPath: PlistPath.path))
-                        guard var Plist = try? PropertyListSerialization.propertyList(from: PlistData, format: nil) as? [String:Any] else {
-                            LogMessage_CarrierName += "- "+"Read Error"+"\n"
-                            continue
+                    do {
+                        LogMessage_CarrierName = "[- Run -]\n"
+                        guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/var/mobile/Library/Carrier Bundles/Overlay/") else {
+                            LogMessage_CarrierName += "FileList Error\n"
+                            return
                         }
-                        var EditedDict = Plist as! [String: Any]
-                        if EditedDict.keys.contains("StatusBarImages") == false{
-                            LogMessage_CarrierName += "- "+"Skip"+"\n"
-                            continue
-                        }
-                        EditedDict.removeValue(forKey: "MyAccountURLTitle")
-                        EditedDict.removeValue(forKey: "MyAccountURL")
-                        EditedDict.removeValue(forKey: "CarrierBookmarks")
-                        
-                        var StatusBarImages = EditedDict["StatusBarImages"] as! [[String: Any]]
-                        for i in stride(from: 0, to: StatusBarImages.count, by: 1) {
-                            var StatusBarCarrierName = StatusBarImages[i] as! [String: Any]
-                            StatusBarCarrierName.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
-                            StatusBarImages[i] = StatusBarCarrierName
-                        }
-                        EditedDict["StatusBarImages"] = StatusBarImages
-                        
-                        guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { continue }
-//                        LogMessage += String(PlistData.count)+"\n"
-//                        LogMessage += String(newData.count)+"\n"
-                        var fileManager = FileManager.default
-                        var filePath = fileManager.urls(for: .libraryDirectory,
-                                                            in: .userDomainMask)[0].appendingPathComponent(file)
-                        
-                        var count = 0
-                        while true {
-                            newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
-                            if newData.count == PlistData.count {
-                                break
-                            }
-                            if newData.count > PlistData.count {
-                                LogMessage_CarrierName += "- "+"Error"+"\n"
+                        for file in files {
+                            LogMessage_CarrierName += file+"\n"
+                            let PlistPath = URL(fileURLWithPath: "/var/mobile/Library/Carrier Bundles/Overlay/"+file)
+                            let PlistData = try! Data(contentsOf: URL(fileURLWithPath: PlistPath.path))
+                            guard var Plist = try? PropertyListSerialization.propertyList(from: PlistData, format: nil) as? [String:Any] else {
+                                LogMessage_CarrierName += "- "+"Read Error"+"\n"
                                 continue
                             }
-                            count += 1
-                            EditedDict.updateValue(String(repeating:"0", count:count), forKey: "MyAccountURLTitle")
+                            var EditedDict = Plist as! [String: Any]
+                            if EditedDict.keys.contains("StatusBarImages") == false{
+                                LogMessage_CarrierName += "- "+"Skip"+"\n"
+                                continue
+                            }
+                            EditedDict.removeValue(forKey: "MyAccountURLTitle")
+                            EditedDict.removeValue(forKey: "MyAccountURL")
+                            EditedDict.removeValue(forKey: "CarrierBookmarks")
+                            
+                            var StatusBarImages = EditedDict["StatusBarImages"] as! [[String: Any]]
+                            for i in stride(from: 0, to: StatusBarImages.count, by: 1) {
+                                var StatusBarCarrierName = StatusBarImages[i] as! [String: Any]
+                                StatusBarCarrierName.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
+                                StatusBarImages[i] = StatusBarCarrierName
+                            }
+                            EditedDict["StatusBarImages"] = StatusBarImages
+                            
+                            guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { continue }
+                            //                        LogMessage += String(PlistData.count)+"\n"
+                            //                        LogMessage += String(newData.count)+"\n"
+                            var fileManager = FileManager.default
+                            var filePath = fileManager.urls(for: .libraryDirectory,
+                                                            in: .userDomainMask)[0].appendingPathComponent(file)
+                            
+                            var count = 0
+                            while true {
+                                newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
+                                if newData.count == PlistData.count {
+                                    break
+                                }
+                                if newData.count > PlistData.count {
+                                    LogMessage_CarrierName += "- "+"Error"+"\n"
+                                    continue
+                                }
+                                count += 1
+                                EditedDict.updateValue(String(repeating:"0", count:count), forKey: "MyAccountURLTitle")
+                            }
+                            
+                            let tmp = overwriteData(
+                                TargetFilePath: PlistPath.path,
+                                OverwriteFileData: newData)
+                            if tmp.contains("Success") {
+                                UserDefaults.standard.set(NewCarrierName, forKey: "NewCarrierName")
+                                Reboot_Required = true
+                            }
+                            LogMessage_CarrierName += "- "+tmp+"\n"
                         }
-                        
-                        let tmp = overwriteData(
-                            TargetFilePath: PlistPath.path,
-                            OverwriteFileData: newData)
-                        if tmp.contains("Success") {
-                            UserDefaults.standard.set(NewCarrierName, forKey: "NewCarrierName")
-                            Reboot_Required = true
-                        }
-                        LogMessage_CarrierName += "- "+tmp+"\n"
+                        LogMessage_CarrierName += "End..."
+                    } catch {
+                        LogMessage_CarrierName += "Fatal Error..."
                     }
-                    LogMessage_CarrierName += "End..."
                 }
                 .onAppear {
                     NewCarrierName = UserDefaults.standard.string(forKey: "NewCarrierName") ?? ""
