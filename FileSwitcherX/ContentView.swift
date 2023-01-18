@@ -53,6 +53,7 @@ struct ContentView: View {
     
     @State private var NewCarrierName = ""
     @State private var Reboot_Required = false
+    @State private var LogMessage_CarrierName = ""
 
     @State var TargetFilesPath_Dict: [TargetFilesPath_Dict_Struct] = [
         TargetFilesPath_Dict_Struct(
@@ -296,72 +297,165 @@ struct ContentView: View {
                 )
             ]
         ),
+        TargetFilesPath_Dict_Struct(
+            Header: "Dial Sound",
+            TargetFilesPath_Dict: [
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "dtmf-0.caf",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-0.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "dtmf-1.caf",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-1.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "dtmf-2.caf",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-2.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "dtmf-3.caf",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-3.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "dtmf-4.caf",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-4.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "dtmf-5.caf",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-5.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "dtmf-6.caf",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-6.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "dtmf-7.caf",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-7.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "dtmf-8.caf",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-8.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "dtmf-9.caf",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-9.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "# (dtmf-pound.caf)",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-pound.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                ),
+                TargetFilesPath_Struct(
+                    TargetFileTitle: "* (dtmf-star.caf)",
+                    TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-star.caf",
+                    LocationRequired: false,
+                    DefaultFileHeader: "caf"
+                )
+            ]
+        ),
     ]
     var body: some View {
         List {
-            TextField("New CarrierName", text: $NewCarrierName)
-            Button("Set Carrier Name") {
-                LogMessage = "Start"
-                guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/var/mobile/Library/Carrier Bundles/Overlay/") else {
-                    LogMessage = "FileList Error"
-                    return
-                }
-                LogMessage = "FileList OK"
-                for file in files {
-                    LogMessage = file
-                    let PlistPath = URL(fileURLWithPath: "/var/mobile/Library/Carrier Bundles/Overlay/"+file)
-                    let PlistData = try! Data(contentsOf: URL(fileURLWithPath: PlistPath.path))
-
-                    let plist = NSMutableDictionary(contentsOfFile: PlistPath.path)
-                    var EditedDict = plist as! [String: Any]
-                    if EditedDict.keys.contains("StatusBarImages") == false{
-                        print("- Skip")
-                        continue
+            Section(header: Text("Text Editor")) {
+                TextField("New CarrierName", text: $NewCarrierName)
+                Button("Set Carrier Name") {
+                    LogMessage_CarrierName = "[- Run -]\n"
+                    guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/var/mobile/Library/Carrier Bundles/Overlay/") else {
+                        LogMessage_CarrierName += "FileList Error\n"
+                        return
                     }
-                    var StatusBarImages = EditedDict["StatusBarImages"] as! [[String: Any]]
-                    for i in stride(from: 0, to: StatusBarImages.count, by: 1) {
-                        var StatusBarCarrierName = StatusBarImages[i] as! [String: Any]
-                        StatusBarCarrierName.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
-                        StatusBarImages[i] = StatusBarCarrierName
-                    }
-                    EditedDict["StatusBarImages"] = StatusBarImages
-                    EditedDict["MyAccountURLTitle"] = ""
-                    EditedDict["MyAccountURL"] = ""
-
-                    var count = 0
-                    while true {
-                        EditedDict.updateValue(String(repeating:"0", count:count), forKey: "MyAccountURLTitle")
-                        var newData_size = (try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)).count
-                        if newData_size >= PlistData.count {
-                            print("==")
-                            print(PlistData.count)
-                            print(newData_size)
-                            break
+                    for file in files {
+                        LogMessage_CarrierName += file+"\n"
+                        let PlistPath = URL(fileURLWithPath: "/var/mobile/Library/Carrier Bundles/Overlay/"+file)
+                        let PlistData = try! Data(contentsOf: URL(fileURLWithPath: PlistPath.path))
+                        guard var Plist = try? PropertyListSerialization.propertyList(from: PlistData, format: nil) as? [String:Any] else {
+                            LogMessage_CarrierName += "- "+"Read Error"+"\n"
+                            continue
                         }
-                        count += 1
+                        var EditedDict = Plist as! [String: Any]
+                        if EditedDict.keys.contains("StatusBarImages") == false{
+                            LogMessage_CarrierName += "- "+"Skip"+"\n"
+                            continue
+                        }
+                        EditedDict.removeValue(forKey: "MyAccountURLTitle")
+                        EditedDict.removeValue(forKey: "MyAccountURL")
+                        EditedDict.removeValue(forKey: "CarrierBookmarks")
+                        
+                        var StatusBarImages = EditedDict["StatusBarImages"] as! [[String: Any]]
+                        for i in stride(from: 0, to: StatusBarImages.count, by: 1) {
+                            var StatusBarCarrierName = StatusBarImages[i] as! [String: Any]
+                            StatusBarCarrierName.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
+                            StatusBarImages[i] = StatusBarCarrierName
+                        }
+                        EditedDict["StatusBarImages"] = StatusBarImages
+                        
+                        guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { continue }
+//                        LogMessage += String(PlistData.count)+"\n"
+//                        LogMessage += String(newData.count)+"\n"
+                        var fileManager = FileManager.default
+                        var filePath = fileManager.urls(for: .libraryDirectory,
+                                                            in: .userDomainMask)[0].appendingPathComponent(file)
+                        
+                        var count = 0
+                        while true {
+                            newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
+                            if newData.count == PlistData.count {
+                                break
+                            }
+                            if newData.count > PlistData.count {
+                                LogMessage_CarrierName += "- "+"Error"+"\n"
+                                continue
+                            }
+                            count += 1
+                            EditedDict.updateValue(String(repeating:"0", count:count), forKey: "MyAccountURLTitle")
+                        }
+                        
+                        let tmp = overwriteData(
+                            TargetFilePath: PlistPath.path,
+                            OverwriteFileData: newData)
+                        if tmp.contains("Success") {
+                            UserDefaults.standard.set(NewCarrierName, forKey: "NewCarrierName")
+                            Reboot_Required = true
+                        }
+                        LogMessage_CarrierName += "- "+tmp+"\n"
                     }
-
-                    var newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
-
-                    let tmp = overwriteData(
-                        TargetFilePath: PlistPath.path,
-                        OverwriteFileData: newData)
-                    if tmp.contains("Success") {
-                        UserDefaults.standard.set(NewCarrierName, forKey: "NewCarrierName")
-                        Reboot_Required = true
-                    }
-                    LogMessage = tmp
+                    LogMessage_CarrierName += "End..."
                 }
-            }
-            .onAppear {
-                NewCarrierName = UserDefaults.standard.string(forKey: "NewCarrierName") ?? ""
-            }
-            .alert(isPresented: $Reboot_Required) {
-                Alert(title: Text("Success. Reboot Required"),
-                      message: Text("The iPhone must be manually restarted for it to apply.."),
-                      primaryButton: .destructive(Text("OK")),
-                      secondaryButton: .default(Text("Cancel"))
-                )
+                .onAppear {
+                    NewCarrierName = UserDefaults.standard.string(forKey: "NewCarrierName") ?? ""
+                }
+                .alert(isPresented: $Reboot_Required) {
+                    Alert(title: Text("Success. Reboot Required"),
+                          message: Text("The iPhone must be manually restarted for it to apply.."),
+                          primaryButton: .destructive(Text("OK")),
+                          secondaryButton: .default(Text("Cancel"))
+                    )
+                }
+                Text(LogMessage_CarrierName)
+                Divider()
+                    .frame(height: 1)
+                    .background(Color.white)
             }
             ForEach(TargetFilesPath_Dict.indices, id: \.self) { index in
                 Section(header: Text(TargetFilesPath_Dict[index].Header)) {
