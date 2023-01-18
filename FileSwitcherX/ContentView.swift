@@ -301,17 +301,19 @@ struct ContentView: View {
         List {
             TextField("New CarrierName", text: $NewCarrierName)
             Button("Set Carrier Name") {
+                LogMessage = "Start"
                 guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/var/mobile/Library/Carrier Bundles/Overlay/") else {
                     LogMessage = "FileList Error"
                     return
                 }
+                LogMessage = "FileList OK"
                 for file in files {
-                    print(file)
+                    LogMessage = file
                     let PlistPath = URL(fileURLWithPath: "/var/mobile/Library/Carrier Bundles/Overlay/"+file)
                     let PlistData = try! Data(contentsOf: URL(fileURLWithPath: PlistPath.path))
-                    
+
                     let plist = NSMutableDictionary(contentsOfFile: PlistPath.path)
-                    var EditedDict = Dictionary<String, Any>(_immutableCocoaDictionary: plist!)
+                    var EditedDict = plist as! [String: Any]
                     if EditedDict.keys.contains("StatusBarImages") == false{
                         print("- Skip")
                         continue
@@ -325,7 +327,7 @@ struct ContentView: View {
                     EditedDict["StatusBarImages"] = StatusBarImages
                     EditedDict["MyAccountURLTitle"] = ""
                     EditedDict["MyAccountURL"] = ""
-                    
+
                     var count = 0
                     while true {
                         EditedDict.updateValue(String(repeating:"0", count:count), forKey: "MyAccountURLTitle")
@@ -338,9 +340,9 @@ struct ContentView: View {
                         }
                         count += 1
                     }
-                    
+
                     var newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
-                    
+
                     let tmp = overwriteData(
                         TargetFilePath: PlistPath.path,
                         OverwriteFileData: newData)
@@ -355,7 +357,7 @@ struct ContentView: View {
                 NewCarrierName = UserDefaults.standard.string(forKey: "NewCarrierName") ?? ""
             }
             .alert(isPresented: $Reboot_Required) {
-                Alert(title: Text("Reboot Required"),
+                Alert(title: Text("Success. Reboot Required"),
                       message: Text("The iPhone must be manually restarted for it to apply.."),
                       primaryButton: .destructive(Text("OK")),
                       secondaryButton: .default(Text("Cancel"))
