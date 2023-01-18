@@ -15,7 +15,7 @@
 		3D937D5F2967514A000A6B15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D937D5E2967514A000A6B15 /* Assets.xcassets */; };
 		3D937D622967514A000A6B15 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D937D612967514A000A6B15 /* Preview Assets.xcassets */; };
 		3DACCD6F296F365600C36F1B /* OverWriteFiles in Resources */ = {isa = PBXBuildFile; fileRef = 3DACCD6E296F365600C36F1B /* OverWriteFiles */; };
-		3DD9D596296760C5000D403B /* FileSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD9D595296760C5000D403B /* FileSwitcher.swift */; };
+		3DD9D596296760C5000D403B /* overwrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD9D595296760C5000D403B /* overwrite.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,8 +29,9 @@
 		3D937D5C29675145000A6B15 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3D937D5E2967514A000A6B15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D937D612967514A000A6B15 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		3D94B83D2974D2B100B26C96 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3DACCD6E296F365600C36F1B /* OverWriteFiles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = OverWriteFiles; sourceTree = "<group>"; };
-		3DD9D595296760C5000D403B /* FileSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSwitcher.swift; sourceTree = "<group>"; };
+		3DD9D595296760C5000D403B /* overwrite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = overwrite.swift; sourceTree = "<group>"; };
 		3DD9D59729676123000D403B /* FileSwitcherX-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FileSwitcherX-Bridging-Header.h"; sourceTree = "<group>"; };
 		3DD9D5B6296803EC000D403B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -69,7 +70,7 @@
 				3DD9D5B6296803EC000D403B /* Info.plist */,
 				3D937D5A29675145000A6B15 /* FileSwitcherXApp.swift */,
 				3D937D5C29675145000A6B15 /* ContentView.swift */,
-				3DD9D595296760C5000D403B /* FileSwitcher.swift */,
+				3DD9D595296760C5000D403B /* overwrite.swift */,
 				3DACCD6E296F365600C36F1B /* OverWriteFiles */,
 				3D937D5E2967514A000A6B15 /* Assets.xcassets */,
 				3D937D602967514A000A6B15 /* Preview Content */,
@@ -172,7 +173,7 @@
 				3D1D924629711080008925BE /* poc.m in Sources */,
 				3D937D5B29675145000A6B15 /* FileSwitcherXApp.swift in Sources */,
 				3D0C0300296BE15A005D927F /* vm_unaligned_copy_switch_race.c in Sources */,
-				3DD9D596296760C5000D403B /* FileSwitcher.swift in Sources */,
+				3DD9D596296760C5000D403B /* overwrite.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +184,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				3D24ADFE296E7218009490D3 /* ja */,
+				3D94B83D2974D2B100B26C96 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -313,7 +315,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FileSwitcherX/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = WQL5MJWHM6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FileSwitcherX/Info.plist;
@@ -331,8 +333,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherX";
+				MARKETING_VERSION = 1.7b;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherXs";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "FileSwitcherX/FileSwitcherX-Bridging-Header.h";
@@ -351,7 +353,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FileSwitcherX/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = WQL5MJWHM6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FileSwitcherX/Info.plist;
@@ -369,8 +371,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherX";
+				MARKETING_VERSION = 1.7b;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.straight-tamago.FileSwitcherXs";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "FileSwitcherX/FileSwitcherX-Bridging-Header.h";

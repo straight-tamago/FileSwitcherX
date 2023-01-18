@@ -50,6 +50,9 @@ struct ContentView: View {
     
     @State private var ReplaceModeShowing = false
     @State private var ReplaceChoose = false
+    
+    @State private var NewCarrierName = ""
+    @State private var Reboot_Required = false
 
     @State var TargetFilesPath_Dict: [TargetFilesPath_Dict_Struct] = [
         TargetFilesPath_Dict_Struct(
@@ -294,9 +297,70 @@ struct ContentView: View {
             ]
         ),
     ]
-
     var body: some View {
         List {
+            TextField("New CarrierName", text: $NewCarrierName)
+            Button("Set Carrier Name") {
+                guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/var/mobile/Library/Carrier Bundles/Overlay/") else {
+                    LogMessage = "FileList Error"
+                    return
+                }
+                for file in files {
+                    print(file)
+                    let PlistPath = URL(fileURLWithPath: "/var/mobile/Library/Carrier Bundles/Overlay/"+file)
+                    let PlistData = try! Data(contentsOf: URL(fileURLWithPath: PlistPath.path))
+                    
+                    let plist = NSMutableDictionary(contentsOfFile: PlistPath.path)
+                    var EditedDict = Dictionary<String, Any>(_immutableCocoaDictionary: plist!)
+                    if EditedDict.keys.contains("StatusBarImages") == false{
+                        print("- Skip")
+                        continue
+                    }
+                    var StatusBarImages = EditedDict["StatusBarImages"] as! [[String: Any]]
+                    for i in stride(from: 0, to: StatusBarImages.count, by: 1) {
+                        var StatusBarCarrierName = StatusBarImages[i] as! [String: Any]
+                        StatusBarCarrierName.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
+                        StatusBarImages[i] = StatusBarCarrierName
+                    }
+                    EditedDict["StatusBarImages"] = StatusBarImages
+                    EditedDict["MyAccountURLTitle"] = ""
+                    EditedDict["MyAccountURL"] = ""
+                    
+                    var count = 0
+                    while true {
+                        EditedDict.updateValue(String(repeating:"0", count:count), forKey: "MyAccountURLTitle")
+                        var newData_size = (try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)).count
+                        if newData_size >= PlistData.count {
+                            print("==")
+                            print(PlistData.count)
+                            print(newData_size)
+                            break
+                        }
+                        count += 1
+                    }
+                    
+                    var newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
+                    
+                    let tmp = overwriteData(
+                        TargetFilePath: PlistPath.path,
+                        OverwriteFileData: newData)
+                    if tmp.contains("Success") {
+                        UserDefaults.standard.set(NewCarrierName, forKey: "NewCarrierName")
+                        Reboot_Required = true
+                    }
+                    LogMessage = tmp
+                }
+            }
+            .onAppear {
+                NewCarrierName = UserDefaults.standard.string(forKey: "NewCarrierName") ?? ""
+            }
+            .alert(isPresented: $Reboot_Required) {
+                Alert(title: Text("Reboot Required"),
+                      message: Text("The iPhone must be manually restarted for it to apply.."),
+                      primaryButton: .destructive(Text("OK")),
+                      secondaryButton: .default(Text("Cancel"))
+                )
+            }
             ForEach(TargetFilesPath_Dict.indices, id: \.self) { index in
                 Section(header: Text(TargetFilesPath_Dict[index].Header)) {
                     ForEach(TargetFilesPath_Dict[index].TargetFilesPath_Dict.indices, id: \.self) { index_2 in
@@ -625,9 +689,7 @@ struct ContentView: View {
                     let _ = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: "xxx")
                 }else {
                     let ReplaceFilePath = UserDefaults.standard.string(forKey: item_2.TargetFilePath+"_ReplaceFilePath") ?? ""
-                    if ReplaceFilePath == "" {
-                        let _ = overwrite(TargetFilePath: item_2.TargetFilePath, OverwriteData: item_2.DefaultFileHeader)
-                    }else {
+                    if ReplaceFilePath != "" {
                         let _ = overwriteFile(TargetFilePath: item_2.TargetFilePath, OverwriteFilePath: ReplaceFilePath)
                     }
                 }
@@ -737,13 +799,3 @@ func getImageByUrl(url: URL) -> UIImage{
     }
     return UIImage()
 }
-
-//    var newPlist = plist
-//    var s0 = newPlist["StatusBarImages"] as! [Dictionary<String, Any>]
-//    var s1 = s0[0]["StatusBarCarrierName"] as! String
-//    (s0[0]["StatusBarCarrierName"] as! String) = "ss"
-//    print(s1)
-//    let newData = try! PropertyListSerialization.data(fromPropertyList: newPlist, format: .binary, options: 0)
-//
-//    overwriteFileS(newData, plistPath)
-//}
