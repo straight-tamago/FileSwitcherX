@@ -14,7 +14,7 @@ struct TargetFilesPath_Struct: Identifiable, Hashable {
     var id = UUID()
     let TargetFileTitle: String
     let TargetFilePath: String
-    let LocationRequired: Bool
+    var LocationRequired: Bool = false
     let DefaultFileHeader: String
     var Disable: Bool = false
     var Replace: Bool = false
@@ -62,7 +62,6 @@ struct ContentView: View {
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Homebar (Assets.car)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/MaterialKit.framework/Assets.car",
-                    LocationRequired: false,
                     DefaultFileHeader: "BOM"
                 ),
                 TargetFilesPath_Struct(
@@ -178,7 +177,6 @@ struct ContentView: View {
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Switcher Blur\n(homeScreenBackdrop-application.materialrecipe)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoard.framework/homeScreenBackdrop-application.materialrecipe",
-                    LocationRequired: false,
                     DefaultFileHeader: "bpl",
                     OverWriteFiles_Dict: [
                         OverWriteFiles_Struct(
@@ -193,7 +191,6 @@ struct ContentView: View {
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Shortcut Banner\n(BannersAuthorizedBundleIDs.plist)",
                     TargetFilePath: "/System/Library/PrivateFrameworks/SpringBoard.framework/BannersAuthorizedBundleIDs.plist",
-                    LocationRequired: false,
                     DefaultFileHeader: "bpl"
                 )
             ]
@@ -204,31 +201,26 @@ struct ContentView: View {
                 TargetFilesPath_Struct(
                     TargetFileTitle: "key_press_click.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/key_press_click.caf",
-                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "key_press_delete.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/key_press_delete.caf",
-                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "key_press_modifier.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/key_press_modifier.caf",
-                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Tock.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/Tock.caf",
-                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "Tink.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/Tink.caf",
-                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
             ]
@@ -280,19 +272,16 @@ struct ContentView: View {
                 TargetFilesPath_Struct(
                     TargetFileTitle: "lock.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/lock.caf",
-                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "low_power.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/low_power.caf",
-                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "connect_power.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/connect_power.caf",
-                    LocationRequired: false,
                     DefaultFileHeader: "caf"
                 )
             ]
@@ -303,73 +292,73 @@ struct ContentView: View {
                 TargetFilesPath_Struct(
                     TargetFileTitle: "dtmf-0.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-0.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "dtmf-1.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-1.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "dtmf-2.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-2.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "dtmf-3.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-3.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "dtmf-4.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-4.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "dtmf-5.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-5.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "dtmf-6.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-6.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "dtmf-7.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-7.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "dtmf-8.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-8.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "dtmf-9.caf",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-9.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "# (dtmf-pound.caf)",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-pound.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 ),
                 TargetFilesPath_Struct(
                     TargetFileTitle: "* (dtmf-star.caf)",
                     TargetFilePath: "/System/Library/Audio/UISounds/nano/dtmf-star.caf",
-                    LocationRequired: false,
+                    LocationRequired: true,
                     DefaultFileHeader: "caf"
                 )
             ]
@@ -380,6 +369,7 @@ struct ContentView: View {
             Section(header: Text("Text Editor")) {
                 TextField("New CarrierName", text: $NewCarrierName)
                 Button("Set Carrier Name") {
+                    var IsSuccess = [Bool]()
                     do {
                         LogMessage_CarrierName = "[- Run -]\n"
                         guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/var/mobile/Library/Carrier Bundles/Overlay/") else {
@@ -402,6 +392,9 @@ struct ContentView: View {
                             EditedDict.removeValue(forKey: "MyAccountURLTitle")
                             EditedDict.removeValue(forKey: "MyAccountURL")
                             EditedDict.removeValue(forKey: "CarrierBookmarks")
+                            EditedDict.removeValue(forKey: "CarrierName")
+                            EditedDict.removeValue(forKey: "StockSymboli")
+                            EditedDict.removeValue(forKey: "HomeBundleIdentifier")
                             
                             var StatusBarImages = EditedDict["StatusBarImages"] as! [[String: Any]]
                             for i in stride(from: 0, to: StatusBarImages.count, by: 1) {
@@ -425,8 +418,8 @@ struct ContentView: View {
                                     break
                                 }
                                 if newData.count > PlistData.count {
-                                    LogMessage_CarrierName += "- "+"Error"+"\n"
-                                    continue
+                                    LogMessage_CarrierName += "- "+"Size Error"+"\n"
+                                    break
                                 }
                                 count += 1
                                 EditedDict.updateValue(String(repeating:"0", count:count), forKey: "MyAccountURLTitle")
@@ -437,11 +430,17 @@ struct ContentView: View {
                                 OverwriteFileData: newData)
                             if tmp.contains("Success") {
                                 UserDefaults.standard.set(NewCarrierName, forKey: "NewCarrierName")
-                                Reboot_Required = true
+                                IsSuccess.append(true)
+                            }else{
+                                IsSuccess.append(false)
                             }
                             LogMessage_CarrierName += "- "+tmp+"\n"
                         }
                         LogMessage_CarrierName += "End..."
+                        if IsSuccess.allSatisfy { $0 == true } {
+                            LogMessage_CarrierName += "\n"+"- "+"Reboot Required"
+                            Reboot_Required = true
+                        }
                     } catch {
                         LogMessage_CarrierName += "Fatal Error..."
                     }
