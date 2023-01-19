@@ -377,11 +377,12 @@ struct ContentView: View {
                             return
                         }
                         for file in files {
-                            LogMessage_CarrierName += file+"\n"
+                            LogMessage_CarrierName += "\n"+file+"\n"
                             let PlistPath = URL(fileURLWithPath: "/var/mobile/Library/Carrier Bundles/Overlay/"+file)
                             let PlistData = try! Data(contentsOf: URL(fileURLWithPath: PlistPath.path))
                             guard var Plist = try? PropertyListSerialization.propertyList(from: PlistData, format: nil) as? [String:Any] else {
                                 LogMessage_CarrierName += "- "+"Read Error"+"\n"
+                                IsSuccess.append(false)
                                 continue
                             }
                             var EditedDict = Plist as! [String: Any]
@@ -399,14 +400,15 @@ struct ContentView: View {
                             var StatusBarImages = EditedDict["StatusBarImages"] as! [[String: Any]]
                             for i in stride(from: 0, to: StatusBarImages.count, by: 1) {
                                 var StatusBarCarrierName = StatusBarImages[i] as! [String: Any]
+                                LogMessage_CarrierName += "   "+(StatusBarCarrierName["StatusBarCarrierName"] as! String)
+                                LogMessage_CarrierName += " -> "
                                 StatusBarCarrierName.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
+                                LogMessage_CarrierName += (StatusBarCarrierName["StatusBarCarrierName"] as! String)+"\n"
                                 StatusBarImages[i] = StatusBarCarrierName
                             }
                             EditedDict["StatusBarImages"] = StatusBarImages
                             
                             guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { continue }
-                            //                        LogMessage += String(PlistData.count)+"\n"
-                            //                        LogMessage += String(newData.count)+"\n"
                             var fileManager = FileManager.default
                             var filePath = fileManager.urls(for: .libraryDirectory,
                                                             in: .userDomainMask)[0].appendingPathComponent(file)
