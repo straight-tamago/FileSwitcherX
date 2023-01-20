@@ -54,6 +54,10 @@ struct ContentView: View {
     @State private var NewCarrierName = ""
     @State private var Reboot_Required = false
     @State private var LogMessage_CarrierName = ""
+    @State private var NewSwipeUpToUnlock = ""
+    @State private var LogMessage_SwipeUpToUnlock = ""
+    @State private var NewBetaAlert = ""
+    @State private var LogMessage_NewBetaAlert = ""
 
     @State var TargetFilesPath_Dict: [TargetFilesPath_Dict_Struct] = [
         TargetFilesPath_Dict_Struct(
@@ -367,8 +371,8 @@ struct ContentView: View {
     var body: some View {
         List {
             Section(header: Text("Text Editor")) {
-                TextField("New CarrierName", text: $NewCarrierName)
-                Button("Set Carrier Name") {
+                TextField("CarrierName", text: $NewCarrierName)
+                Button("Apply") {
                     var IsSuccess = [Bool]()
                     do {
                         LogMessage_CarrierName = "[- Run -]\n"
@@ -399,19 +403,24 @@ struct ContentView: View {
                             
                             var StatusBarImages = EditedDict["StatusBarImages"] as! [[String: Any]]
                             for i in stride(from: 0, to: StatusBarImages.count, by: 1) {
-                                var StatusBarCarrierName = StatusBarImages[i] as! [String: Any]
-                                LogMessage_CarrierName += "   "+(StatusBarCarrierName["StatusBarCarrierName"] as! String)
-                                LogMessage_CarrierName += " -> "
-                                StatusBarCarrierName.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
-                                LogMessage_CarrierName += (StatusBarCarrierName["StatusBarCarrierName"] as! String)+"\n"
-                                StatusBarImages[i] = StatusBarCarrierName
+                                var StatusBarImages_i = StatusBarImages[i] as! [String: Any]
+//                                StatusBarCarrierName
+                                if StatusBarImages_i.keys.contains("StatusBarCarrierName") == true{
+                                    LogMessage_CarrierName += "   "+(StatusBarImages_i["StatusBarCarrierName"] as! String)
+                                    LogMessage_CarrierName += " -> "
+                                    StatusBarImages_i.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
+                                    LogMessage_CarrierName += (StatusBarImages_i["StatusBarCarrierName"] as! String)+"\n"
+                                }else{
+                                    LogMessage_CarrierName += "[No StatusBarCarrierName]\n"
+                                    LogMessage_CarrierName += "No Key -> "
+                                    StatusBarImages_i.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
+                                    LogMessage_CarrierName += (StatusBarImages_i["StatusBarCarrierName"] as! String)+"\n"
+                                }
+                                StatusBarImages[i] = StatusBarImages_i
                             }
                             EditedDict["StatusBarImages"] = StatusBarImages
                             
                             guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { continue }
-                            var fileManager = FileManager.default
-                            var filePath = fileManager.urls(for: .libraryDirectory,
-                                                            in: .userDomainMask)[0].appendingPathComponent(file)
                             
                             var count = 0
                             while true {
@@ -461,7 +470,151 @@ struct ContentView: View {
                 Divider()
                     .frame(height: 1)
                     .background(Color.white)
+                TextField("Swipe up to unlock", text: $NewSwipeUpToUnlock)
+                Button("Apply") {
+                    var IsSuccess = [Bool]()
+                    do {
+                        LogMessage_SwipeUpToUnlock = "[- Run -]\n"
+                        guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/System/Library/PrivateFrameworks/SpringBoardUIServices.framework") else {
+                            LogMessage_SwipeUpToUnlock += "FileList Error\n"
+                            return
+                        }
+                        for file in files {
+                            if file.contains(".lproj") == false{ continue }
+                            LogMessage_SwipeUpToUnlock += file+"\n"
+                            guard let infiles = try? FileManager.default.contentsOfDirectory(atPath: "/System/Library/PrivateFrameworks/SpringBoardUIServices.framework/"+file) else {
+                                return
+                            }
+                            for infile in infiles {
+                                if infile.contains("Late") == false{ continue }
+                                LogMessage_SwipeUpToUnlock += infile+"\n"
+                                let PlistPath = URL(fileURLWithPath: "/System/Library/PrivateFrameworks/SpringBoardUIServices.framework/"+file+"/"+infile)
+                                let PlistData = try! Data(contentsOf: URL(fileURLWithPath: PlistPath.path))
+                                guard var Plist = try? PropertyListSerialization.propertyList(from: PlistData, format: nil) as? [String:Any] else {
+                                    LogMessage_SwipeUpToUnlock += "- "+"Read Error"+"\n"
+                                    IsSuccess.append(false)
+                                    continue
+                                }
+                                var EditedDict = Plist as! [String: Any]
+                                EditedDict.updateValue(NewSwipeUpToUnlock, forKey: "FACE_ID_NOT_LOOKING")
+                                EditedDict.updateValue(NewSwipeUpToUnlock, forKey: "FACE_ID_DISABLED")
+                                EditedDict.removeValue(forKey: "FACE_ID_UPSIDE_DOWN")
+                                EditedDict.removeValue(forKey: "FACE_ID_POSE_OUT_OF_RANGE")
+                                EditedDict.removeValue(forKey: "GENERIC_WATCH_UNLOCK_ERROR")
+                                
+                                guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { continue }
+                                
+                                LogMessage_SwipeUpToUnlock += String(newData.count)+"\n"
+                                LogMessage_SwipeUpToUnlock += String(PlistData.count)+"\n"
+                                
+                                var count = 0
+                                while true {
+                                    newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
+                                    if newData.count == PlistData.count {
+                                        break
+                                    }
+                                    if newData.count > PlistData.count {
+                                        LogMessage_SwipeUpToUnlock += "- "+"Size Error"+"\n"
+                                        break
+                                    }
+                                    count += 1
+                                    EditedDict.updateValue(String(repeating:"0", count:count), forKey: "FACE_ID_UPSIDE_DOWN")
+                                }
+                                
+                                let tmp = overwriteData(
+                                    TargetFilePath: PlistPath.path,
+                                    OverwriteFileData: newData)
+                                if tmp.contains("Success") {
+                                    UserDefaults.standard.set(NewSwipeUpToUnlock, forKey: "NewSwipeUpToUnlock")
+                                    IsSuccess.append(true)
+                                }else{
+                                    IsSuccess.append(false)
+                                }
+                                LogMessage_SwipeUpToUnlock += "- "+tmp+"\n"
+                            }
+                        }
+                        LogMessage_SwipeUpToUnlock += "End..."
+                        if IsSuccess.allSatisfy { $0 == true } {
+                            LogMessage_NewBetaAlert += "\n"+"- "+"Respring Required"
+                            Respring_confirm = true
+                        }
+                    }catch {
+                        LogMessage_SwipeUpToUnlock += "Fatal Error..."
+                    }
+                }
+                Text(LogMessage_SwipeUpToUnlock)
+                Divider()
+                    .frame(height: 1)
+                    .background(Color.white)
+                TextField("Beta Alert", text: $NewBetaAlert)
+                Button("Apply") {
+                    var IsSuccess = [Bool]()
+                    do {
+                        LogMessage_NewBetaAlert = "[- Run -]\n"
+                        guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/System/Library/CoreServices/SpringBoard.app/") else {
+                            LogMessage_NewBetaAlert += "FileList Error\n"
+                            return
+                        }
+                        for file in files {
+                            if file.contains(".lproj") == false{ continue }
+                            LogMessage_NewBetaAlert += file+"\n"
+                            let PlistPath = URL(fileURLWithPath: "/System/Library/CoreServices/SpringBoard.app/"+file+"/SpringBoard.strings")
+                            let PlistData = try! Data(contentsOf: URL(fileURLWithPath: PlistPath.path))
+                            guard var Plist = try? PropertyListSerialization.propertyList(from: PlistData, format: nil) as? [String:Any] else {
+                                LogMessage_NewBetaAlert += "- "+"Read Error"+"\n"
+                                IsSuccess.append(false)
+                                continue
+                            }
+                            var EditedDict = Plist as! [String: Any]
+                            EditedDict.updateValue(NewBetaAlert, forKey: "DEVELOPER_BUILD_EXPIRATION")
+                            EditedDict.removeValue(forKey: "DISPLAY_BRIGHTNESS_DECREASE_DISCOVERABILITY")
+                            EditedDict.removeValue(forKey: "DISPLAY_BRIGHTNESS_INCREASE_DISCOVERABILITY")
+                            EditedDict.removeValue(forKey: "SIRI")
+
+                            guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { continue }
+
+                            LogMessage_NewBetaAlert += String(newData.count)+"\n"
+                            LogMessage_NewBetaAlert += String(PlistData.count)+"\n"
+
+                            var count = 0
+                            while true {
+                                newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
+                                if newData.count == PlistData.count {
+                                    break
+                                }
+                                if newData.count > PlistData.count {
+                                    LogMessage_NewBetaAlert += "- "+"Size Error"+"\n"
+                                    break
+                                }
+                                count += 1
+                                EditedDict.updateValue(String(repeating:"0", count:count), forKey: "SIRI")
+                            }
+
+                            let tmp = overwriteData(
+                                TargetFilePath: PlistPath.path,
+                                OverwriteFileData: newData)
+                            if tmp.contains("Success") {
+                                UserDefaults.standard.set(NewBetaAlert, forKey: "NewSwipeUpToUnlock")
+                                IsSuccess.append(true)
+                            }else{
+                                IsSuccess.append(false)
+                            }
+                            LogMessage_NewBetaAlert += "- "+tmp+"\n"
+                        }
+                        LogMessage_NewBetaAlert += "End..."
+                        if IsSuccess.allSatisfy { $0 == true } {
+                            LogMessage_NewBetaAlert += "\n"+"- "+"Respring Required"
+                            Respring_confirm = true
+                        }
+                    }catch {
+                        LogMessage_NewBetaAlert += "Fatal Error..."
+                    }
+                }
             }
+            Text(LogMessage_NewBetaAlert)
+            Divider()
+                .frame(height: 1)
+                .background(Color.white)
             ForEach(TargetFilesPath_Dict.indices, id: \.self) { index in
                 Section(header: Text(TargetFilesPath_Dict[index].Header)) {
                     ForEach(TargetFilesPath_Dict[index].TargetFilesPath_Dict.indices, id: \.self) { index_2 in
