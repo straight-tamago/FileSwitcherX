@@ -370,95 +370,11 @@ struct ContentView: View {
     ]
     var body: some View {
         List {
-            Section(header: Text("Text Editor")) {
-                TextField("Carrier Name", text: $NewCarrierName)
+            Section(header: Text("Text Editor (Beta)")) {
+                Text("Carrier Name")
+                TextField("Input", text: $NewCarrierName)
                 Button("Apply") {
-                    var IsSuccess = [Bool]()
-                    do {
-                        LogMessage_CarrierName = "[- Run -]\n"
-                        guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/var/mobile/Library/Carrier Bundles/Overlay/") else {
-                            LogMessage_CarrierName += "FileList Error\n"
-                            return
-                        }
-                        for file in files {
-                            LogMessage_CarrierName += "\n"+file+"\n"
-                            let PlistPath = URL(fileURLWithPath: "/var/mobile/Library/Carrier Bundles/Overlay/"+file)
-                            guard let PlistData = try? Data(contentsOf: URL(fileURLWithPath: PlistPath.path)) else {
-                                LogMessage_CarrierName += "- "+"Read Error(Data)"+"\n"
-                                IsSuccess.append(false)
-                                continue
-                            }
-                            guard var Plist = try? PropertyListSerialization.propertyList(from: PlistData, format: nil) as? [String:Any] else {
-                                LogMessage_CarrierName += "- "+"Read Error(Plist)"+"\n"
-                                IsSuccess.append(false)
-                                continue
-                            }
-                            var EditedDict = Plist as! [String: Any]
-                            if EditedDict.keys.contains("StatusBarImages") == false{
-                                LogMessage_CarrierName += "- "+"Skip"+"\n"
-                                continue
-                            }
-                            EditedDict.removeValue(forKey: "MyAccountURLTitle")
-                            EditedDict.removeValue(forKey: "MyAccountURL")
-                            EditedDict.removeValue(forKey: "CarrierBookmarks")
-                            EditedDict.removeValue(forKey: "CarrierName")
-                            EditedDict.removeValue(forKey: "StockSymboli")
-                            EditedDict.removeValue(forKey: "HomeBundleIdentifier")
-                            
-                            var StatusBarImages = EditedDict["StatusBarImages"] as! [[String: Any]]
-                            for i in stride(from: 0, to: StatusBarImages.count, by: 1) {
-                                var StatusBarImages_i = StatusBarImages[i] as! [String: Any]
-//                                StatusBarCarrierName
-                                if StatusBarImages_i.keys.contains("StatusBarCarrierName") == true{
-                                    LogMessage_CarrierName += "   "+(StatusBarImages_i["StatusBarCarrierName"] as! String)
-                                    LogMessage_CarrierName += " -> "
-                                    StatusBarImages_i.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
-                                    LogMessage_CarrierName += (StatusBarImages_i["StatusBarCarrierName"] as! String)+"\n"
-                                }else{
-                                    LogMessage_CarrierName += "[No StatusBarCarrierName]\n"
-                                    LogMessage_CarrierName += "No Key -> "
-                                    StatusBarImages_i.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
-                                    LogMessage_CarrierName += (StatusBarImages_i["StatusBarCarrierName"] as! String)+"\n"
-                                }
-                                StatusBarImages[i] = StatusBarImages_i
-                            }
-                            EditedDict["StatusBarImages"] = StatusBarImages
-                            
-                            guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { continue }
-                            
-                            var count = 0
-                            while true {
-                                newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
-                                if newData.count == PlistData.count {
-                                    break
-                                }
-                                if newData.count > PlistData.count {
-                                    LogMessage_CarrierName += "- "+"Size Error"+"\n"
-                                    break
-                                }
-                                count += 1
-                                EditedDict.updateValue(String(repeating:"0", count:count), forKey: "MyAccountURLTitle")
-                            }
-                            
-                            let tmp = overwriteData(
-                                TargetFilePath: PlistPath.path,
-                                OverwriteFileData: newData)
-                            if tmp.contains("Success") {
-                                UserDefaults.standard.set(NewCarrierName, forKey: "NewCarrierName")
-                                IsSuccess.append(true)
-                            }else{
-                                IsSuccess.append(false)
-                            }
-                            LogMessage_CarrierName += "- "+tmp+"\n"
-                        }
-                        LogMessage_CarrierName += "End..."
-                        if IsSuccess.allSatisfy { $0 == true } {
-                            LogMessage_CarrierName += "\n"+"- "+"Reboot Required"
-                            Reboot_Required = true
-                        }
-                    } catch {
-                        LogMessage_CarrierName += "Fatal Error..."
-                    }
+                    CarrierName()
                 }
                 .onAppear {
                     NewCarrierName = UserDefaults.standard.string(forKey: "NewCarrierName") ?? ""
@@ -470,87 +386,21 @@ struct ContentView: View {
                           secondaryButton: .default(Text("Cancel"))
                     )
                 }
-                Button("FileList Test") {
-                    LogMessage_CarrierName = "[- FileList Test -]\n"
-                    guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/var/mobile/Library/Carrier Bundles/Overlay/") else {
-                        LogMessage_CarrierName += "FileList Error\n"
-                        return
-                    }
-                    for file in files {
-                        LogMessage_CarrierName += "\n"+file+"\n"
-                    }
-                }
                 Text(LogMessage_CarrierName)
                 Divider()
                     .frame(height: 1)
                     .background(Color.white)
-                Text("Beta Alert (TrollStore Only) (iOS15 or newer)")
+                Text("Beta Alert (TrollStore Only) (iOS15 Only)")
                     .disabled(ios14)
                 TextField("Input", text: $NewBetaAlert)
                     .disabled(ios14)
                 Button("Apply") {
-                    var IsSuccess = [Bool]()
-                    do {
-                        LogMessage_NewBetaAlert = "[- Run -]\n"
-                        guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/System/Library/CoreServices/SpringBoard.app/") else {
-                            LogMessage_NewBetaAlert += "FileList Error\n"
-                            return
-                        }
-                        for file in files {
-                            if file.contains(".lproj") == false{ continue }
-                            LogMessage_NewBetaAlert += file+"\n"
-                            let PlistPath = URL(fileURLWithPath: "/System/Library/CoreServices/SpringBoard.app/"+file+"/SpringBoard.strings")
-                            let PlistData = try! Data(contentsOf: URL(fileURLWithPath: PlistPath.path))
-                            guard var Plist = try? PropertyListSerialization.propertyList(from: PlistData, format: nil) as? [String:Any] else {
-                                LogMessage_NewBetaAlert += "- "+"Read Error"+"\n"
-                                IsSuccess.append(false)
-                                continue
-                            }
-                            var EditedDict = Plist as! [String: Any]
-                            EditedDict.updateValue(NewBetaAlert, forKey: "DEVELOPER_BUILD_EXPIRATION")
-                            EditedDict.removeValue(forKey: "DISPLAY_BRIGHTNESS_DECREASE_DISCOVERABILITY")
-                            EditedDict.removeValue(forKey: "DISPLAY_BRIGHTNESS_INCREASE_DISCOVERABILITY")
-                            EditedDict.removeValue(forKey: "SIRI")
-                            
-                            guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { continue }
-                            
-                            LogMessage_NewBetaAlert += String(newData.count)+"\n"
-                            LogMessage_NewBetaAlert += String(PlistData.count)+"\n"
-                            
-                            var count = 0
-                            while true {
-                                newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
-                                if newData.count == PlistData.count {
-                                    break
-                                }
-                                if newData.count > PlistData.count {
-                                    LogMessage_NewBetaAlert += "- "+"Size Error"+"\n"
-                                    break
-                                }
-                                count += 1
-                                EditedDict.updateValue(String(repeating:"0", count:count), forKey: "SIRI")
-                            }
-                            
-                            let tmp = overwriteData(
-                                TargetFilePath: PlistPath.path,
-                                OverwriteFileData: newData)
-                            if tmp.contains("Success") {
-                                UserDefaults.standard.set(NewBetaAlert, forKey: "NewSwipeUpToUnlock")
-                                IsSuccess.append(true)
-                            }else{
-                                IsSuccess.append(false)
-                            }
-                            LogMessage_NewBetaAlert += "- "+tmp+"\n"
-                        }
-                        LogMessage_NewBetaAlert += "End..."
-                        if IsSuccess.allSatisfy { $0 == true } {
-                            LogMessage_NewBetaAlert += "\n"+"- "+"Respring Required"
-                            Respring_confirm = true
-                        }
-                    }catch {
-                        LogMessage_NewBetaAlert += "Fatal Error..."
-                    }
-                }.disabled(ios14)
+                    BetaAlert()
+                }
+                .disabled(ios14)
+                .onAppear {
+                    NewBetaAlert = UserDefaults.standard.string(forKey: "NewBetaAlert") ?? ""
+                }
                 Text(LogMessage_NewBetaAlert)
                 Divider()
                     .frame(height: 1)
@@ -902,6 +752,159 @@ struct ContentView: View {
                 TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].Replace = UserDefaults.standard.string(forKey: TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath+"_ReplaceFilePath") != nil ? true : false
                 TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].ReplaceFilePath = UserDefaults.standard.string(forKey: TargetFilesPath_Dict[index].TargetFilesPath_Dict[index_2].TargetFilePath+"_ReplaceFilePath") ?? ""
             }
+        }
+    }
+    
+    func CarrierName() {
+        var IsSuccess = [Bool]()
+        do {
+            LogMessage_CarrierName = "[- Run -]\n"
+            guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/var/mobile/Library/Carrier Bundles/Overlay/") else {
+                LogMessage_CarrierName += "FileList Error\n"
+                return
+            }
+            for file in files {
+                LogMessage_CarrierName += "\n"+file+"\n"
+                let PlistPath = URL(fileURLWithPath: "/var/mobile/Library/Carrier Bundles/Overlay/"+file)
+                guard let PlistData = try? Data(contentsOf: URL(fileURLWithPath: PlistPath.path)) else {
+                    LogMessage_CarrierName += "- "+"Read Error(Data)"+"\n"
+                    IsSuccess.append(false)
+                    continue
+                }
+                guard var Plist = try? PropertyListSerialization.propertyList(from: PlistData, format: nil) as? [String:Any] else {
+                    LogMessage_CarrierName += "- "+"Read Error(Plist)"+"\n"
+                    IsSuccess.append(false)
+                    continue
+                }
+                var EditedDict = Plist as! [String: Any]
+                if EditedDict.keys.contains("StatusBarImages") == false{
+                    LogMessage_CarrierName += "- "+"Skip"+"\n"
+                    continue
+                }
+                EditedDict.removeValue(forKey: "MyAccountURLTitle")
+                EditedDict.removeValue(forKey: "MyAccountURL")
+                EditedDict.removeValue(forKey: "CarrierBookmarks")
+                EditedDict.removeValue(forKey: "CarrierName")
+                EditedDict.removeValue(forKey: "StockSymboli")
+                EditedDict.removeValue(forKey: "HomeBundleIdentifier")
+                
+                var StatusBarImages = EditedDict["StatusBarImages"] as! [[String: Any]]
+                for i in stride(from: 0, to: StatusBarImages.count, by: 1) {
+                    var StatusBarImages_i = StatusBarImages[i] as! [String: Any]
+//                                StatusBarCarrierName
+                    if StatusBarImages_i.keys.contains("StatusBarCarrierName") == true{
+                        LogMessage_CarrierName += "   "+(StatusBarImages_i["StatusBarCarrierName"] as! String)
+                        LogMessage_CarrierName += " -> "
+                        StatusBarImages_i.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
+                        LogMessage_CarrierName += (StatusBarImages_i["StatusBarCarrierName"] as! String)+"\n"
+                    }else{
+                        LogMessage_CarrierName += "[No StatusBarCarrierName]\n"
+                        LogMessage_CarrierName += "No Key -> "
+                        StatusBarImages_i.updateValue(NewCarrierName, forKey: "StatusBarCarrierName")
+                        LogMessage_CarrierName += (StatusBarImages_i["StatusBarCarrierName"] as! String)+"\n"
+                    }
+                    StatusBarImages[i] = StatusBarImages_i
+                }
+                EditedDict["StatusBarImages"] = StatusBarImages
+                
+                guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { continue }
+                
+                var count = 0
+                while true {
+                    newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
+                    if newData.count == PlistData.count {
+                        break
+                    }
+                    if newData.count > PlistData.count {
+                        LogMessage_CarrierName += "- "+"Size Error"+"\n"
+                        break
+                    }
+                    count += 1
+                    EditedDict.updateValue(String(repeating:"0", count:count), forKey: "MyAccountURLTitle")
+                }
+                
+                let tmp = overwriteData(
+                    TargetFilePath: PlistPath.path,
+                    OverwriteFileData: newData)
+                if tmp.contains("Success") {
+                    UserDefaults.standard.set(NewCarrierName, forKey: "NewCarrierName")
+                    IsSuccess.append(true)
+                }else{
+                    IsSuccess.append(false)
+                }
+                LogMessage_CarrierName += "- "+tmp+"\n"
+            }
+            LogMessage_CarrierName += "End..."
+            if IsSuccess.allSatisfy { $0 == true } {
+                LogMessage_CarrierName += "\n"+"- "+"Reboot Required"
+                Reboot_Required = true
+            }
+        } catch {
+            LogMessage_CarrierName += "Fatal Error..."
+        }
+    }
+    
+    func BetaAlert() {
+        var IsSuccess = [Bool]()
+        do {
+            LogMessage_NewBetaAlert = "[- Run -]\n"
+            guard let files = try? FileManager.default.contentsOfDirectory(atPath: "/System/Library/CoreServices/SpringBoard.app/") else {
+                LogMessage_NewBetaAlert += "FileList Error\n"
+                return
+            }
+            for file in files {
+                if file.contains(".lproj") == false{ continue }
+                LogMessage_NewBetaAlert += file+"\n"
+                let PlistPath = URL(fileURLWithPath: "/System/Library/CoreServices/SpringBoard.app/"+file+"/SpringBoard.strings")
+                let PlistData = try! Data(contentsOf: URL(fileURLWithPath: PlistPath.path))
+                guard var Plist = try? PropertyListSerialization.propertyList(from: PlistData, format: nil) as? [String:Any] else {
+                    LogMessage_NewBetaAlert += "- "+"Read Error"+"\n"
+                    IsSuccess.append(false)
+                    continue
+                }
+                var EditedDict = Plist as! [String: Any]
+                EditedDict.updateValue(NewBetaAlert, forKey: "DEVELOPER_BUILD_EXPIRATION")
+                EditedDict.removeValue(forKey: "DISPLAY_BRIGHTNESS_DECREASE_DISCOVERABILITY")
+                EditedDict.removeValue(forKey: "DISPLAY_BRIGHTNESS_INCREASE_DISCOVERABILITY")
+                EditedDict.removeValue(forKey: "SIRI")
+                
+                guard var newData = try? PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0) else { continue }
+                
+                LogMessage_NewBetaAlert += String(newData.count)+"\n"
+                LogMessage_NewBetaAlert += String(PlistData.count)+"\n"
+                
+                var count = 0
+                while true {
+                    newData = try! PropertyListSerialization.data(fromPropertyList: EditedDict, format: .binary, options: 0)
+                    if newData.count == PlistData.count {
+                        break
+                    }
+                    if newData.count > PlistData.count {
+                        LogMessage_NewBetaAlert += "- "+"Size Error"+"\n"
+                        break
+                    }
+                    count += 1
+                    EditedDict.updateValue(String(repeating:"0", count:count), forKey: "SIRI")
+                }
+                
+                let tmp = overwriteData(
+                    TargetFilePath: PlistPath.path,
+                    OverwriteFileData: newData)
+                if tmp.contains("Success") {
+                    UserDefaults.standard.set(NewBetaAlert, forKey: "NewSwipeUpToUnlock")
+                    IsSuccess.append(true)
+                }else{
+                    IsSuccess.append(false)
+                }
+                LogMessage_NewBetaAlert += "- "+tmp+"\n"
+            }
+            LogMessage_NewBetaAlert += "End..."
+            if IsSuccess.allSatisfy { $0 == true } {
+                LogMessage_NewBetaAlert += "\n"+"- "+"Respring Required"
+                Respring_confirm = true
+            }
+        }catch {
+            LogMessage_NewBetaAlert += "Fatal Error..."
         }
     }
 }
