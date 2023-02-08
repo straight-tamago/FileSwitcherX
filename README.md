@@ -1,6 +1,6 @@
 # FileSwitcherX
 
-iOS 14 - 16.1.2
+iOS 14.0-15.7.1 & 16.0-16.1.2
 
 # Install
 - TrollStore
